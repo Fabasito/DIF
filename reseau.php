@@ -7,6 +7,7 @@ $active = 'reseau';
 $partners = load_json('partenaires', []);
 $promos   = load_json('promotions', []);
 $nb_part  = count($partners);
+$mcounts  = members_count_by_promotion();
 
 include __DIR__ . '/inc/head.php';
 ?>
@@ -61,8 +62,15 @@ include __DIR__ . '/inc/head.php';
         <a class="link-arrow mt-2" href="actualites.php">Suivre la vie des promotions →</a>
       </div>
       <div class="reveal">
-        <?php foreach ($promos as $p): ?>
-        <div class="promo-row"><span class="yr"><?= e($p['years'] ?? '') ?></span><span class="lv"><?= e($p['levels'] ?? '') ?></span></div>
+        <?php foreach ($promos as $p): $yrs = $p['years'] ?? ''; $has = ($mcounts[$yrs] ?? 0) > 0; ?>
+        <div class="promo-row">
+          <span class="yr"><?= e($yrs) ?></span>
+          <?php if ($has): ?>
+            <a class="lv" href="promotion.php?slug=<?= e(rawurlencode(slugify($yrs))) ?>" style="color:var(--brass)">Trombinoscope →</a>
+          <?php else: ?>
+            <span class="lv"><?= e($p['levels'] ?? '') ?></span>
+          <?php endif; ?>
+        </div>
         <?php endforeach; ?>
       </div>
     </div>

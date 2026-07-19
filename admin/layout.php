@@ -7,9 +7,12 @@ function admin_header(string $active = '', string $pageTitle = 'Administration')
         'actualites'  => ['Actualités', 'collection.php?type=actualites'],
         'partenaires' => ['Partenaires', 'collection.php?type=partenaires'],
         'promotions'  => ['Promotions', 'collection.php?type=promotions'],
+        'membres'     => ['Trombinoscope', 'collection.php?type=membres'],
         'temoignages' => ['Citations', 'collection.php?type=temoignages'],
+        'messages'    => ['Messages', 'messages.php'],
         'settings'    => ['Réglages du site', 'settings.php'],
     ];
+    $unread = unread_messages_count();
     ?><!doctype html>
 <html lang="fr">
 <head>
@@ -25,7 +28,7 @@ function admin_header(string $active = '', string $pageTitle = 'Administration')
     <div class="admin-brand"><span class="mk">D<b>I</b>F</span> <span>Administration</span></div>
     <nav>
       <?php foreach ($items as $key => [$label, $href]): ?>
-      <a href="<?= e($href) ?>"<?= $active === $key ? ' class="on"' : '' ?>><?= e($label) ?></a>
+      <a href="<?= e($href) ?>"<?= $active === $key ? ' class="on"' : '' ?>><?= e($label) ?><?php if ($key === 'messages' && $unread): ?> <span class="nav-badge"><?= (int)$unread ?></span><?php endif; ?></a>
       <?php endforeach; ?>
     </nav>
     <div class="admin-side-foot">

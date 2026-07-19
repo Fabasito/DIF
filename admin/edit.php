@@ -104,7 +104,7 @@ admin_header($type, ($isEdit ? 'Modifier' : 'Ajouter') . ' — ' . $def['label']
     <?php elseif ($ftype === 'textarea'): ?>
       <textarea id="f-<?= e($name) ?>" name="<?= e($name) ?>"><?= e($val) ?></textarea>
     <?php elseif ($ftype === 'select'):
-        $opts = $meta[2] ?? []; ?>
+        $opts = field_options($meta[2] ?? []); ?>
       <select id="f-<?= e($name) ?>" name="<?= e($name) ?>">
         <?php foreach ($opts as $opt): ?>
         <option<?= $opt === $val ? ' selected' : '' ?>><?= e($opt) ?></option>

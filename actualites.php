@@ -4,14 +4,31 @@ $title = 'Actualités — Master Droit & Ingénierie Financière | Lyon 3';
 $desc  = 'Conférences, mises en situation professionnelle, partenariats et vie associative : toute l\'actualité du Master Droit et Ingénierie Financière de Lyon 3.';
 $active = 'actualites';
 
-$actus = load_json('actualites', []);
-$actus = array_values(array_filter($actus, 'is_published'));
-usort($actus, fn($a, $b) => strcmp($b['date'] ?? '', $a['date'] ?? ''));
+$all = array_values(array_filter(load_json('actualites', []), 'is_published'));
+usort($all, fn($a, $b) => strcmp($b['date'] ?? '', $a['date'] ?? ''));
+
+// Catégories disponibles
 $cats = [];
-foreach ($actus as $a) { if (!empty($a['category'])) $cats[$a['category']] = true; }
+foreach ($all as $a) { if (!empty($a['category'])) $cats[$a['category']] = true; }
 $cats = array_keys($cats);
 
-$extra_head = "<style>.chip.filter{cursor:pointer}.chip.filter[aria-pressed=\"true\"]{background:var(--ink);color:#fff;border-color:var(--ink)}:root[data-theme=\"dark\"] .chip.filter[aria-pressed=\"true\"]{background:var(--brass);color:#1a1406}</style>";
+// Filtre par catégorie (serveur)
+$cat = (string)($_GET['cat'] ?? '');
+if ($cat !== '' && in_array($cat, $cats, true)) {
+    $filtered = array_values(array_filter($all, fn($a) => ($a['category'] ?? '') === $cat));
+} else {
+    $cat = '';
+    $filtered = $all;
+}
+
+// Pagination
+$perPage = 9;
+$total   = count($filtered);
+$pages   = max(1, (int)ceil($total / $perPage));
+$page    = min($pages, max(1, (int)($_GET['page'] ?? 1)));
+$items   = array_slice($filtered, ($page - 1) * $perPage, $perPage);
+
+$qs = fn($p, $c) => 'actualites.php?' . http_build_query(array_filter(['cat' => $c, 'page' => $p > 1 ? $p : null]));
 
 include __DIR__ . '/inc/head.php';
 ?>
@@ -26,16 +43,19 @@ include __DIR__ . '/inc/head.php';
 
 <section class="section">
   <div class="container">
-    <div class="chips reveal" style="margin-bottom:2.5rem" id="filters">
-      <button class="chip filter" data-cat="*" aria-pressed="true">Tout</button>
+    <div class="chips reveal" style="margin-bottom:2.5rem">
+      <a class="chip filter<?= $cat === '' ? ' on' : '' ?>" href="actualites.php">Tout</a>
       <?php foreach ($cats as $c): ?>
-      <button class="chip filter" data-cat="<?= e($c) ?>" aria-pressed="false"><?= e($c) ?></button>
+      <a class="chip filter<?= $cat === $c ? ' on' : '' ?>" href="<?= e($qs(1, $c)) ?>"><?= e($c) ?></a>
       <?php endforeach; ?>
     </div>
 
-    <div class="grid cols-3" id="news-grid">
-      <?php foreach ($actus as $i => $n): ?>
-      <a class="news-card reveal<?= !empty($n['image']) ? ' has-img' : '' ?>"<?= ($i % 3) ? ' data-d="'.($i % 3).'"' : '' ?> href="article.php?slug=<?= e(rawurlencode(article_slug($n))) ?>" data-cat="<?= e($n['category'] ?? '') ?>">
+    <?php if (empty($items)): ?>
+      <p class="center" style="color:var(--muted)">Aucune actualité dans cette catégorie.</p>
+    <?php else: ?>
+    <div class="grid cols-3">
+      <?php foreach ($items as $i => $n): ?>
+      <a class="news-card reveal<?= !empty($n['image']) ? ' has-img' : '' ?>"<?= ($i % 3) ? ' data-d="'.($i % 3).'"' : '' ?> href="article.php?slug=<?= e(rawurlencode(article_slug($n))) ?>">
         <?php if (!empty($n['image'])): ?><span class="thumb" style="background-image:url('<?= e($n['image']) ?>')"></span><?php endif; ?>
         <div class="flex-between"><span class="cat"><?= e($n['category'] ?? '') ?></span><span class="date"><?= e(fr_date($n['date'] ?? '')) ?></span></div>
         <h3><?= e($n['title'] ?? '') ?></h3>
@@ -43,25 +63,16 @@ include __DIR__ . '/inc/head.php';
       </a>
       <?php endforeach; ?>
     </div>
-    <?php if (empty($actus)): ?>
-    <p class="center" style="color:var(--muted)">Aucune actualité pour le moment.</p>
+
+    <?php if ($pages > 1): ?>
+    <nav class="pager" aria-label="Pagination">
+      <?php if ($page > 1): ?><a class="pager-btn" href="<?= e($qs($page - 1, $cat)) ?>">← Précédent</a><?php else: ?><span class="pager-btn is-off">← Précédent</span><?php endif; ?>
+      <span class="pager-num">Page <?= $page ?> / <?= $pages ?></span>
+      <?php if ($page < $pages): ?><a class="pager-btn" href="<?= e($qs($page + 1, $cat)) ?>">Suivant →</a><?php else: ?><span class="pager-btn is-off">Suivant →</span><?php endif; ?>
+    </nav>
+    <?php endif; ?>
     <?php endif; ?>
   </div>
 </section>
-
-<script>
-(function () {
-  var filters = document.getElementById('filters');
-  if (!filters) return;
-  filters.addEventListener('click', function (e) {
-    var b = e.target.closest('.filter'); if (!b) return;
-    var cat = b.getAttribute('data-cat');
-    filters.querySelectorAll('.filter').forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
-    document.querySelectorAll('#news-grid .news-card').forEach(function (card) {
-      card.style.display = (cat === '*' || card.getAttribute('data-cat') === cat) ? '' : 'none';
-    });
-  });
-})();
-</script>
 
 <?php include __DIR__ . '/inc/footer.php'; ?>

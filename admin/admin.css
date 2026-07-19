@@ -51,6 +51,20 @@ a.card:hover{border-color:var(--brass);box-shadow:0 8px 24px -12px #0f1a3330}
 .row .m{font-size:.82rem;color:var(--muted);font-family:var(--mono)}
 .row .actions{display:flex;gap:.4rem;flex:0 0 auto}
 .badge-draft{display:inline-block;font-family:var(--mono);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:#8a6d1a;background:#f6edcf;border:1px solid #e6d59a;padding:.1rem .45rem;border-radius:999px;vertical-align:middle;margin-left:.5rem}
+.nav-badge{display:inline-block;font-family:var(--sans);font-size:.66rem;font-weight:700;background:var(--brass);color:#1a1406;border-radius:999px;padding:.05rem .45rem;vertical-align:middle;margin-left:.3rem}
+.card-alert{border-color:var(--brass);box-shadow:0 8px 24px -14px #c2a15b66}
+
+/* Messages */
+.msg-list{display:flex;flex-direction:column;gap:1rem}
+.msg{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:1.2rem 1.3rem}
+.msg.unread{border-left:3px solid var(--brass)}
+.msg-head{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;flex-wrap:wrap}
+.msg-from{font-weight:700;margin-right:.6rem}
+.msg-mail{font-family:var(--mono);font-size:.82rem;color:var(--brass)}
+.msg-date{font-family:var(--mono);font-size:.78rem;color:var(--muted)}
+.msg-subject{font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:.5rem 0 .3rem}
+.msg-body{margin:.5rem 0 1rem;color:var(--text);white-space:normal}
+.msg-actions{display:flex;gap:.4rem;flex-wrap:wrap}
 
 /* Buttons */
 .btn{display:inline-flex;align-items:center;gap:.4rem;font:inherit;font-size:.88rem;font-weight:600;padding:.55rem 1rem;border-radius:6px;border:1px solid var(--ink);background:var(--ink);color:#fff;cursor:pointer}

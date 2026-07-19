@@ -43,8 +43,8 @@ avec le thème gratuit *Sydney*. Contenu riche, mais présentation datée et sur
 ```
 Pages publiques (PHP, rendues côté serveur — SEO friendly)
   index.php  le-master.php  formation.php  admissions.php
-  reseau.php  actualites.php  article.php (article détaillé)  contact.php
-  404.php    sitemap.php     robots.txt
+  reseau.php  actualites.php  article.php  promotion.php (trombinoscope)
+  contact.php  404.php  sitemap.php  robots.txt
 
 inc/                 Code partagé
   head.php           <head> + SEO (Open Graph, canonical) + entête/nav
@@ -56,12 +56,14 @@ content/             CONTENU ÉDITABLE (écrit par le back-office)
   actualites.json    articles (avec slug, statut publié/brouillon, image)
   partenaires.json   cabinets & entreprises partenaires (avec logo)
   promotions.json    promotions
+  membres.json       étudiants (trombinoscope) : nom, promotion, niveau, photo
   temoignages.json   citations & témoignages (la 1re alimente la home)
 
 admin/               BACK-OFFICE PRIVÉ (connexion requise)
   login.php  logout.php  index.php (tableau de bord)
   collection.php       liste + réordonnancement + suppression
   edit.php             ajout / modification (+ upload d'images)
+  messages.php         boîte de réception (formulaire de contact)
   settings.php         réglages du site (site.json)
   password.php         changement du mot de passe
   bootstrap.php        session, authentification, CSRF, flash
@@ -87,6 +89,14 @@ logs/                messages de contact (sauvegarde, dossier protégé)
   (articles inclus), `robots.txt`, page **404** personnalisée.
 - **Changement de mot de passe** depuis le back-office (écrit un hash dans `admin/auth.local.php`,
   fichier protégé et non versionné).
+- **Boîte de réception** — les messages du formulaire de contact arrivent dans le back-office
+  (`admin/messages.php`) : compteur de non-lus, marquer lu/non lu, répondre, supprimer. Stockés dans
+  `logs/` (protégé), donc consultables même si l'e-mail n'est pas configuré.
+- **Actualités paginées & filtrables** — filtre par catégorie et pagination côté serveur
+  (9 par page), sans dépendre du JavaScript (bon pour le SEO).
+- **Trombinoscope** — chaque promotion peut afficher ses étudiants (`promotion.php?slug=…`),
+  regroupés par niveau (M1 / M2), avec photo ou pastille à initiale. Les membres se gèrent depuis
+  le back-office (collection « Trombinoscope », avec sélection de la promotion et upload de photo).
 
 Le contenu géré depuis `/admin` est écrit dans `content/*.json` (écriture atomique) et
 **apparaît immédiatement** sur le site public, qui lit ces fichiers à chaque affichage.

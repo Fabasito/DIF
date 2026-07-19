@@ -36,9 +36,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'Content-Type: text/plain; charset=UTF-8',
         ]);
 
-        // Sauvegarde de secours (dossier protégé) pour ne perdre aucun message.
-        $line = json_encode(['t' => date('c')] + $old, JSON_UNESCAPED_UNICODE) . "\n";
-        @file_put_contents(DIF_ROOT . '/logs/messages.log', $line, FILE_APPEND | LOCK_EX);
+        // Enregistrement dans la boîte de réception du back-office (dossier protégé).
+        add_message([
+            'id'      => bin2hex(random_bytes(6)),
+            't'       => date('c'),
+            'nom'     => $old['nom'],
+            'email'   => $old['email'],
+            'sujet'   => $old['sujet'],
+            'message' => $old['message'],
+            'read'    => false,
+        ]);
 
         $mailed = @mail($to, $subject, $bodyTxt, $headers);
         if ($mailed) {

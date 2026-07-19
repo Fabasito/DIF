@@ -100,6 +100,71 @@ function handle_upload(string $field): array {
     return ['ok' => true, 'path' => 'assets/uploads/' . $name];
 }
 
+/* ---- Messages de contact (stockés dans logs/, dossier protégé) ---- */
+define('DIF_LOGS', DIF_ROOT . '/logs');
+function messages_file(): string { return DIF_LOGS . '/messages.json'; }
+
+function load_messages(): array {
+    $f = messages_file();
+    if (!is_file($f)) return [];
+    $a = json_decode((string)file_get_contents($f), true);
+    return is_array($a) ? $a : [];
+}
+
+/** Ajout concurrent-safe d'un message (verrou fichier). */
+function add_message(array $m): bool {
+    if (!is_dir(DIF_LOGS)) @mkdir(DIF_LOGS, 0775, true);
+    $fp = @fopen(messages_file(), 'c+');
+    if (!$fp) return false;
+    if (!flock($fp, LOCK_EX)) { fclose($fp); return false; }
+    $raw = stream_get_contents($fp);
+    $arr = json_decode($raw ?: '[]', true);
+    if (!is_array($arr)) $arr = [];
+    array_unshift($arr, $m);
+    ftruncate($fp, 0); rewind($fp);
+    fwrite($fp, json_encode($arr, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+    fflush($fp); flock($fp, LOCK_UN); fclose($fp);
+    return true;
+}
+
+/** Réécriture atomique (mutations depuis le back-office). */
+function save_messages(array $arr): bool {
+    if (!is_dir(DIF_LOGS)) @mkdir(DIF_LOGS, 0775, true);
+    $json = json_encode($arr, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    $tmp = messages_file() . '.tmp' . getmypid();
+    if (file_put_contents($tmp, $json, LOCK_EX) === false) return false;
+    return rename($tmp, messages_file());
+}
+
+function unread_messages_count(): int {
+    $n = 0;
+    foreach (load_messages() as $m) { if (empty($m['read'])) $n++; }
+    return $n;
+}
+
+/* ---- Promotions : années disponibles + membres du trombinoscope ---- */
+function promotion_years(): array {
+    return array_values(array_filter(array_map(
+        fn($p) => $p['years'] ?? '', load_json('promotions', [])
+    )));
+}
+
+/** Nombre de membres (trombinoscope) par promotion, indexé par années. */
+function members_count_by_promotion(): array {
+    $counts = [];
+    foreach (load_json('membres', []) as $m) {
+        $p = $m['promotion'] ?? '';
+        if ($p !== '') $counts[$p] = ($counts[$p] ?? 0) + 1;
+    }
+    return $counts;
+}
+
+/** Options d'un champ select, en développant le jeton dynamique @promotions. */
+function field_options($opts): array {
+    if ($opts === '@promotions') return promotion_years();
+    return is_array($opts) ? $opts : [];
+}
+
 /**
  * Registre des collections éditables par le back-office.
  * Chaque champ : nom => [label, type(text|textarea|date|select|image), options?].
@@ -140,6 +205,17 @@ function collections(): array {
             'fields'   => [
                 'years'  => ['Années (ex : 2025 — 2026)', 'text'],
                 'levels' => ['Niveaux (ex : Master 1 & Master 2)', 'text'],
+            ],
+        ],
+        'membres' => [
+            'label'    => 'Trombinoscope',
+            'singular' => 'membre',
+            'title'    => 'name',
+            'fields'   => [
+                'name'      => ['Nom & prénom', 'text'],
+                'promotion' => ['Promotion', 'select', '@promotions'],
+                'level'     => ['Niveau', 'select', ['Master 1', 'Master 2']],
+                'photo'     => ['Photo', 'image'],
             ],
         ],
         'temoignages' => [

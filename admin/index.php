@@ -8,6 +8,9 @@ $counts = [];
 foreach ($cols as $type => $def) {
     $counts[$type] = count(load_json($type, []));
 }
+$allMsg   = load_messages();
+$msgCount = count($allMsg);
+$unreadMsg = unread_messages_count();
 
 admin_header('index', 'Tableau de bord');
 ?>
@@ -27,6 +30,11 @@ admin_header('index', 'Tableau de bord');
     <p>Gérer les <?= e(mb_strtolower($def['label'])) ?> affichés sur le site.</p>
   </a>
   <?php endforeach; ?>
+  <a class="card<?= $unreadMsg ? ' card-alert' : '' ?>" href="messages.php">
+    <div class="k"><?= (int)$msgCount ?><?php if ($unreadMsg): ?> <span class="nav-badge"><?= (int)$unreadMsg ?> non lu(s)</span><?php endif; ?></div>
+    <h3>Messages</h3>
+    <p>Demandes reçues via le formulaire de contact.</p>
+  </a>
   <a class="card" href="settings.php">
     <div class="k">⚙</div>
     <h3>Réglages du site</h3>
