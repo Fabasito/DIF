@@ -399,20 +399,34 @@ body.nav-open .mobile-nav { transform: translateX(0); }
 /* Carte promotion */
 .promo-card {
   background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
-  padding: 1.5rem 1.5rem 1.35rem; min-height: 188px;
+  min-height: 200px; overflow: hidden;
   display: flex; flex-direction: column;
   transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
 }
 .promo-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); border-color: color-mix(in srgb, var(--brass) 45%, var(--line)); }
+.promo-card .p-photo {
+  display: block; width: 100%; aspect-ratio: 16/10;
+  background-size: cover; background-position: center;
+  filter: saturate(.92);
+  transition: filter .3s ease;
+}
+.promo-card:hover .p-photo { filter: saturate(1.05); }
+.promo-card .p-body { display: flex; flex-direction: column; flex: 1; padding: 1.15rem 1.35rem 1.25rem; }
+.promo-card:not(.has-photo) .p-body { padding-top: 1.5rem; }
 .promo-card .p-eyebrow { font-family: var(--mono); font-size: .66rem; letter-spacing: .18em; text-transform: uppercase; color: var(--brass); }
-.promo-card .p-years { font-family: var(--mono); font-variant-numeric: tabular-nums; letter-spacing: -.03em; font-size: clamp(1.35rem, 1.8vw, 1.6rem); color: var(--text); margin: .85rem 0 .15rem; white-space: nowrap; }
-.promo-card .p-levels { font-size: .88rem; color: var(--muted); }
-.promo-card .p-link { margin-top: auto; padding-top: 1rem; font-family: var(--mono); font-size: .78rem; letter-spacing: .04em; color: var(--brass); display: inline-flex; gap: .45rem; transition: gap .2s ease; }
+.promo-card .p-years { font-family: var(--mono); font-variant-numeric: tabular-nums; letter-spacing: -.03em; font-size: clamp(1.25rem, 1.7vw, 1.5rem); color: var(--text); margin: .55rem 0 .1rem; white-space: nowrap; }
+.promo-card .p-levels { font-size: .86rem; color: var(--muted); }
+.promo-card .p-link { margin-top: auto; padding-top: .9rem; font-family: var(--mono); font-size: .78rem; letter-spacing: .04em; color: var(--brass); display: inline-flex; gap: .45rem; transition: gap .2s ease; }
 .promo-card .p-link:hover { gap: .8rem; }
 .promo-card.is-current { background: var(--ink); border-color: var(--ink); }
 .promo-card.is-current .p-years { color: #fff; }
 .promo-card.is-current .p-levels { color: var(--on-ink-mut); }
 .promo-card.is-current:hover { border-color: var(--brass); }
+
+/* Page promotion : photos de groupe */
+.promo-figure { margin: 0 0 2.5rem; }
+.promo-figure img { width: 100%; border-radius: var(--radius); box-shadow: var(--shadow-md); }
+.promo-figure figcaption { font-family: var(--mono); font-size: .74rem; letter-spacing: .14em; text-transform: uppercase; color: var(--brass); margin-top: .8rem; }
 
 /* Trombinoscope */
 .trombi { display: grid; grid-template-columns: repeat(5, 1fr); gap: clamp(1rem, 2vw, 1.6rem); margin-bottom: 3rem; }

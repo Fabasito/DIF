@@ -8,6 +8,7 @@ function admin_header(string $active = '', string $pageTitle = 'Administration')
         'partenaires' => ['Partenaires', 'collection.php?type=partenaires'],
         'promotions'  => ['Promotions', 'collection.php?type=promotions'],
         'membres'     => ['Trombinoscope', 'collection.php?type=membres'],
+        'dates'       => ['Dates clés', 'collection.php?type=dates'],
         'temoignages' => ['Citations', 'collection.php?type=temoignages'],
         'messages'    => ['Messages', 'messages.php'],
         'settings'    => ['Réglages du site', 'settings.php'],

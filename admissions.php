@@ -7,6 +7,7 @@ $site = load_json('site', []);
 $faculty = $site['contact']['faculty_url'] ?? 'https://facdedroit.univ-lyon3.fr/master-droit-et-ingenierie-financiere-2';
 $resp_email = $site['contact']['responsable_email'] ?? 'quentin.nemoz-rajot@univ-lyon3.fr';
 $email = $site['contact']['email'] ?? 'associationdif1999@gmail.com';
+$dates = load_json('dates', []);
 $extra_head = <<<CSS
 <style>
   .step { display:grid; grid-template-columns:auto 1fr; gap:1.6rem; padding:1.8rem 0; border-top:1px solid var(--line); }
@@ -22,6 +23,16 @@ $extra_head = <<<CSS
   .acc-body { max-height:0; overflow:hidden; transition:max-height .3s ease; }
   .acc-item.open .acc-body { max-height:360px; }
   .acc-body p { color:var(--text-2); padding-bottom:1.3rem; margin:0; }
+  /* Calendrier du candidat */
+  .cal { list-style:none; margin:0; padding:0; position:relative; }
+  .cal::before { content:""; position:absolute; left:7px; top:10px; bottom:10px; width:1px; background:var(--line); }
+  .cal li { position:relative; padding:0 0 2rem 2.2rem; }
+  .cal li:last-child { padding-bottom:0; }
+  .cal li::before { content:""; position:absolute; left:0; top:6px; width:15px; height:15px; border-radius:50%;
+    background:var(--paper); border:2px solid var(--brass); }
+  .cal .c-period { font-family:var(--mono); font-size:.76rem; letter-spacing:.14em; text-transform:uppercase; color:var(--brass); }
+  .cal h3 { font-size:1.2rem; margin:.25rem 0 .25rem; }
+  .cal p { margin:0; color:var(--text-2); font-size:.94rem; max-width:52ch; }
 </style>
 CSS;
 include __DIR__ . '/inc/head.php';
@@ -70,6 +81,61 @@ include __DIR__ . '/inc/head.php';
         <div class="step"><span class="no">04</span><div><h3>Réponse d'admission</h3><p>L'admissibilité puis l'admission vous sont communiquées par courrier.</p></div></div>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- CALENDRIER DU CANDIDAT -->
+<?php if (!empty($dates)): ?>
+<section class="section" id="calendrier">
+  <div class="container">
+    <div class="split" style="align-items:start">
+      <div>
+        <p class="eyebrow">Le calendrier du candidat</p>
+        <h2>Une année de candidature, étape par étape.</h2>
+        <p>Les grandes échéances d'une candidature au Master, de l'ouverture de la plateforme à la rentrée. Dates données à titre indicatif : le calendrier officiel fait foi sur <a href="https://www.monmaster.gouv.fr" target="_blank" rel="noopener" style="color:var(--brass)">monmaster.gouv.fr</a> et sur le site de la Faculté.</p>
+        <a class="btn btn-ghost mt-2" href="<?= e($faculty) ?>" target="_blank" rel="noopener">Consulter le calendrier officiel</a>
+      </div>
+      <ol class="cal reveal">
+        <?php foreach ($dates as $d): ?>
+        <li>
+          <span class="c-period"><?= e($d['period'] ?? '') ?></span>
+          <h3><?= e($d['label'] ?? '') ?></h3>
+          <?php if (!empty($d['note'])): ?><p><?= e($d['note']) ?></p><?php endif; ?>
+        </li>
+        <?php endforeach; ?>
+      </ol>
+    </div>
+  </div>
+</section>
+<?php endif; ?>
+
+<!-- CONSEILS -->
+<section class="section alt" id="conseils">
+  <div class="container">
+    <div class="sec-head"><p class="eyebrow">Nos conseils</p><h2>Mettre toutes les chances de votre côté.</h2></div>
+    <div class="grid cols-4">
+      <article class="card reveal">
+        <div class="idx">01</div>
+        <h3>Soignez le dossier</h3>
+        <p>Des relevés cohérents comptent plus qu'une moyenne parfaite : montrez une progression et un intérêt constant pour le droit des affaires et la finance (matières choisies, mémoires, MOOC…).</p>
+      </article>
+      <article class="card reveal" data-d="1">
+        <div class="idx">02</div>
+        <h3>Une lettre qui vous ressemble</h3>
+        <p>Expliquez pourquoi la double compétence, pourquoi ce Master et pourquoi vous — avec des exemples concrets plutôt que des formules toutes faites. Une page suffit.</p>
+      </article>
+      <article class="card reveal" data-d="2">
+        <div class="idx">03</div>
+        <h3>Valorisez vos expériences</h3>
+        <p>Stage, job étudiant, engagement associatif, séjour à l'étranger : tout ce qui témoigne de votre curiosité et de votre capacité à vous investir a sa place dans le CV.</p>
+      </article>
+      <article class="card reveal" data-d="3">
+        <div class="idx">04</div>
+        <h3>Préparez l'entretien</h3>
+        <p>Suivez l'actualité des affaires (une opération de M&amp;A récente, une réforme fiscale…), sachez présenter votre projet en deux minutes, et venez avec des questions sincères sur la formation.</p>
+      </article>
+    </div>
+    <p style="margin-top:2rem;color:var(--muted);font-size:.9rem">Une question avant de candidater ? L'association répond volontiers aux futurs candidats : <a href="mailto:<?= e($email) ?>" style="color:var(--brass)"><?= e($email) ?></a></p>
   </div>
 </section>
 

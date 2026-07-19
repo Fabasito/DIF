@@ -1,0 +1,7 @@
+[
+  { "period": "Février — Mars", "label": "Dépôt des candidatures sur Mon Master", "note": "Master 1 : candidature via la plateforme nationale monmaster.gouv.fr. Master 2 : dossier via la plateforme de l'Université Jean Moulin Lyon 3." },
+  { "period": "Avril — Mai", "label": "Étude des dossiers", "note": "Examen du dossier académique, du CV et de la lettre de motivation par l'équipe pédagogique." },
+  { "period": "Mai — Juin", "label": "Entretiens & admissibilité", "note": "Entretien oral pour les candidats admissibles en Master 1, puis communication des résultats d'admission." },
+  { "period": "Juin — Juillet", "label": "Réponses et confirmations", "note": "Acceptation de la proposition d'admission et inscription administrative auprès de l'Université." },
+  { "period": "Septembre", "label": "Rentrée du Master", "note": "Début des enseignements à la Faculté de Droit de l'Université Jean Moulin Lyon 3." }
+]

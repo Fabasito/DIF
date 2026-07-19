@@ -159,6 +159,12 @@ function members_count_by_promotion(): array {
     return $counts;
 }
 
+/** Une promotion a une page à montrer si elle a une photo ou des membres. */
+function promo_has_content(array $p, array $mcounts): bool {
+    if (!empty($p['photo']) || !empty($p['photo_m1']) || !empty($p['photo_m2'])) return true;
+    return ($mcounts[$p['years'] ?? ''] ?? 0) > 0;
+}
+
 /** Options d'un champ select, en développant le jeton dynamique @promotions. */
 function field_options($opts): array {
     if ($opts === '@promotions') return promotion_years();
@@ -203,8 +209,21 @@ function collections(): array {
             'singular' => 'promotion',
             'title'    => 'years',
             'fields'   => [
-                'years'  => ['Années (ex : 2025 — 2026)', 'text'],
-                'levels' => ['Niveaux (ex : Master 1 & Master 2)', 'text'],
+                'years'    => ['Années (ex : 2025 — 2026)', 'text'],
+                'levels'   => ['Niveaux (ex : Master 1 & Master 2)', 'text'],
+                'photo'    => ['Photo de groupe (promotion entière)', 'image'],
+                'photo_m2' => ['Photo Master 2', 'image'],
+                'photo_m1' => ['Photo Master 1', 'image'],
+            ],
+        ],
+        'dates' => [
+            'label'    => 'Dates clés (admissions)',
+            'singular' => 'échéance',
+            'title'    => 'label',
+            'fields'   => [
+                'period' => ['Période (ex : Février — Mars)', 'text'],
+                'label'  => ['Intitulé', 'text'],
+                'note'   => ['Précision (facultatif)', 'textarea'],
             ],
         ],
         'membres' => [
