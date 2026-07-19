@@ -433,7 +433,7 @@ body.nav-open .mobile-nav { transform: translateX(0); }
 @media (max-width: 900px) { .trombi { grid-template-columns: repeat(3, 1fr); } }
 @media (max-width: 520px) { .trombi { grid-template-columns: repeat(2, 1fr); } }
 .trombi-card { margin: 0; text-align: center; }
-.trombi-card .tphoto { display: grid; place-items: center; width: 100%; aspect-ratio: 1; border-radius: var(--radius); background: var(--surface-2) center/cover no-repeat; border: 1px solid var(--line); overflow: hidden; }
+.trombi-card .tphoto { display: grid; place-items: center; width: 100%; aspect-ratio: 3/4; border-radius: var(--radius); background: var(--surface-2); background-size: cover; background-position: center top; border: 1px solid var(--line); overflow: hidden; }
 .trombi-card .tphoto-ph { font-family: var(--serif); font-size: 2rem; color: var(--brass); }
 .trombi-card figcaption { margin-top: .7rem; font-weight: 500; font-size: .95rem; }
 
