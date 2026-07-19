@@ -1,78 +1,42 @@
-<!doctype html>
-<html lang="fr">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Master Droit & Ingénierie Financière — Université Jean Moulin Lyon 3</title>
-<meta name="description" content="Formation d'excellence à double compétence droit des affaires et finance d'entreprise. Master 1 & 2 sélectifs, professionnalisants, à l'Université Jean Moulin Lyon 3.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..500&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
-<meta name="theme-color" content="#0f1a33">
-<link rel="stylesheet" href="assets/css/dif.css">
-</head>
-<body>
-<a class="skip-link" href="#main">Aller au contenu</a>
+<?php
+require_once __DIR__ . '/inc/data.php';
+$title = 'Master Droit & Ingénierie Financière — Université Jean Moulin Lyon 3';
+$desc  = 'Formation d\'excellence à double compétence droit des affaires et finance d\'entreprise. Master 1 & 2 sélectifs, professionnalisants, à l\'Université Jean Moulin Lyon 3.';
+$active = '';
 
-<!-- HEADER -->
-<header class="site-header">
-  <div class="container bar">
-    <a class="brand" href="index.html" aria-label="Accueil — Master Droit et Ingénierie Financière">
-      <span class="mono-mark">D<b>I</b>F</span>
-      <span class="brand-sub">Master Droit &amp;<br>Ingénierie Financière<br>Lyon 3</span>
-    </a>
-    <nav class="nav primary" aria-label="Navigation principale">
-      <a href="le-master.html">Le Master</a>
-      <a href="formation.html">La Formation</a>
-      <a href="admissions.html">Admissions</a>
-      <a href="reseau.html">Le Réseau</a>
-      <a href="actualites.html">Actualités</a>
-      <a href="contact.html">Contact</a>
-    </nav>
-    <div class="header-actions">
-      <button class="theme-toggle" data-theme-toggle aria-label="Changer de thème clair/sombre">
-        <svg class="moon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
-        <svg class="sun" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4 12H2M22 12h-2M5 5l1.5 1.5M17.5 17.5 19 19M19 5l-1.5 1.5M6.5 17.5 5 19"/></svg>
-      </button>
-      <a class="btn btn-brass" href="admissions.html">Candidater <span class="arw">→</span></a>
-      <button class="burger" data-burger aria-label="Ouvrir le menu"><span></span><span></span><span></span></button>
-    </div>
-  </div>
-</header>
+$site    = load_json('site', []);
+$hero    = $site['hero'] ?? [];
+$stats   = $site['stats'] ?? [];
+$actus   = load_json('actualites', []);
+$partners= load_json('partenaires', []);
+$temoins = load_json('temoignages', []);
 
-<!-- MOBILE NAV -->
-<div class="mobile-nav" aria-label="Menu mobile">
-  <a href="le-master.html">Le Master</a>
-  <a href="formation.html">La Formation</a>
-  <a href="admissions.html">Admissions</a>
-  <a href="reseau.html">Le Réseau</a>
-  <a href="actualites.html">Actualités</a>
-  <a href="contact.html">Contact</a>
-  <a class="btn btn-brass" href="admissions.html">Candidater →</a>
-</div>
+usort($actus, fn($a, $b) => strcmp($b['date'] ?? '', $a['date'] ?? ''));
+$latest  = array_slice($actus, 0, 3);
+$logos   = array_slice($partners, 0, 8);
+$quote   = $temoins[0] ?? null;
 
-<main id="main">
+include __DIR__ . '/inc/head.php';
+?>
 
 <!-- HERO -->
 <section class="hero">
   <div class="bg"><img src="assets/img/lyon-palais-nuit.jpg" alt="Le Palais de l'Université Jean Moulin illuminé sur les berges du Rhône à Lyon, la nuit"></div>
   <div class="container hero-inner">
-    <p class="kicker">Université Jean Moulin Lyon 3 · depuis 1999</p>
-    <h1 class="h-display">Le droit des affaires,<br>l'exigence de la <span class="accent">finance</span>.</h1>
-    <p class="sub">Une formation sélective qui forge des juristes-financiers à double compétence, immédiatement opérationnels et reconnus bien au-delà de Lyon.</p>
+    <p class="kicker"><?= e($hero['kicker'] ?? 'Université Jean Moulin Lyon 3 · depuis 1999') ?></p>
+    <h1 class="h-display"><?= e($hero['title'] ?? '') ?> <span class="accent"><?= e($hero['accent'] ?? '') ?></span></h1>
+    <p class="sub"><?= e($hero['subtitle'] ?? '') ?></p>
     <div class="cta-row">
-      <a class="btn btn-brass" href="admissions.html">Rejoindre la promotion <span class="arw">→</span></a>
-      <a class="btn btn-ghost" href="formation.html">Découvrir la formation</a>
+      <a class="btn btn-brass" href="admissions.php">Rejoindre la promotion <span class="arw">→</span></a>
+      <a class="btn btn-ghost" href="formation.php">Découvrir la formation</a>
     </div>
   </div>
   <div class="ticker">
     <div class="container">
       <div class="ticker-inner">
-        <div class="cell"><div class="v">400<span class="u">+</span></div><div class="k">diplômés dans le monde</div></div>
-        <div class="cell"><div class="v">~20</div><div class="k">étudiants par promotion</div></div>
-        <div class="cell"><div class="v">2</div><div class="k">stages longue durée</div></div>
-        <div class="cell"><div class="v">25<span class="u">e</span></div><div class="k">promotion en 2026</div></div>
+        <?php foreach ($stats as $s): ?>
+        <div class="cell"><div class="v"><?= e($s['value'] ?? '') ?></div><div class="k"><?= e($s['label'] ?? '') ?></div></div>
+        <?php endforeach; ?>
       </div>
     </div>
   </div>
@@ -155,7 +119,7 @@
           <li><span class="n">M1</span><div><h3>Fondations</h3><p>Analyse financière, fiscalité, comptabilité, droit des sûretés, financement des entreprises. Stage de 3 mois minimum et mémoire.</p></div></li>
           <li><span class="n">M2</span><div><h3>Spécialisation</h3><p>Ingénierie financière, groupes de sociétés, contentieux des affaires, droit boursier, RSE, crypto-actifs. Stage de 3 à 6 mois et mémoire.</p></div></li>
         </ul>
-        <a class="link-arrow mt-2" href="formation.html">Voir le programme détaillé →</a>
+        <a class="link-arrow mt-2" href="formation.php">Voir le programme détaillé →</a>
       </div>
     </div>
   </div>
@@ -194,7 +158,7 @@
         <p class="eyebrow">Les débouchés</p>
         <h2>Une diversité de carrières, un même socle d'excellence.</h2>
         <p>La transversalité du diplôme ouvre les portes des cabinets, des banques, de l'audit-conseil et des directions juridiques et financières. Toute entreprise confrontée à des choix financiers complexes recherche ce juriste-financier capable de concilier options financières, stratégie juridique et fiscalité.</p>
-        <a class="link-arrow mt-2" href="formation.html#debouches">Explorer les débouchés →</a>
+        <a class="link-arrow mt-2" href="formation.php#debouches">Explorer les débouchés →</a>
       </div>
       <div class="reveal">
         <div class="chips">
@@ -224,29 +188,26 @@
       <h2>Un réseau de cabinets et d'entreprises de premier plan.</h2>
     </div>
     <div class="logo-grid reveal">
-      <div class="cell"><div><div class="nm">EY Société d'Avocats</div><div class="ct">M&amp;A · Fiscalité</div></div></div>
-      <div class="cell"><div><div class="nm">Deloitte</div><div class="ct">Audit · Conseil</div></div></div>
-      <div class="cell"><div><div class="nm">Lamartine Conseil</div><div class="ct">Haut de bilan</div></div></div>
-      <div class="cell"><div><div class="nm">Ydès</div><div class="ct">Droit des affaires</div></div></div>
-      <div class="cell"><div><div class="nm">BREMENS</div><div class="ct">Avocats · Notaires</div></div></div>
-      <div class="cell"><div><div class="nm">Almain Avocats</div><div class="ct">Private equity</div></div></div>
-      <div class="cell"><div><div class="nm">Klyde Avocats</div><div class="ct">Droit des sociétés</div></div></div>
-      <div class="cell"><div><div class="nm">LEXICUBE</div><div class="ct">M&amp;A · Fiscal</div></div></div>
+      <?php foreach ($logos as $p): ?>
+      <div class="cell"><div><div class="nm"><?= e($p['name'] ?? '') ?></div><div class="ct"><?= e($p['tags'] ?? '') ?></div></div></div>
+      <?php endforeach; ?>
     </div>
-    <div class="center mt-4"><a class="link-arrow" href="reseau.html">Tous nos partenaires →</a></div>
+    <div class="center mt-4"><a class="link-arrow" href="reseau.php">Tous nos partenaires →</a></div>
   </div>
 </section>
 
-<!-- CITATION DIRECTEUR -->
+<?php if ($quote): ?>
+<!-- CITATION -->
 <section class="section ink">
   <div class="container container-narrow">
     <div class="quote reveal">
-      <blockquote>« Devenir diplômé du Master DIF, c'est avant tout intégrer une grande famille qui se singularise par la curiosité et l'échange. »</blockquote>
-      <div class="who">Quentin Nemoz-Rajot</div>
-      <div class="role">Directeur du Master · Maître de conférences, Faculté de Droit Lyon 3</div>
+      <blockquote>« <?= e($quote['quote'] ?? '') ?> »</blockquote>
+      <div class="who"><?= e($quote['name'] ?? '') ?></div>
+      <div class="role"><?= e($quote['role'] ?? '') ?></div>
     </div>
   </div>
 </section>
+<?php endif; ?>
 
 <!-- ACTUALITES -->
 <section class="section">
@@ -256,24 +217,16 @@
         <p class="eyebrow">La vie du Master</p>
         <h2>Actualités</h2>
       </div>
-      <a class="link-arrow" href="actualites.html">Toutes les actualités →</a>
+      <a class="link-arrow" href="actualites.php">Toutes les actualités →</a>
     </div>
     <div class="grid cols-3">
-      <a class="news-card reveal" href="actualites.html">
-        <div class="flex-between"><span class="cat">Vie associative</span><span class="date">12 mai 2026</span></div>
-        <h3>Remerciements aux structures de stage des M1</h3>
-        <p>Les étudiants du Master 1 ont entamé leur stage de fin d'année, d'une durée de trois mois.</p>
+      <?php foreach ($latest as $i => $n): ?>
+      <a class="news-card reveal"<?= $i ? ' data-d="'.$i.'"' : '' ?> href="actualites.php">
+        <div class="flex-between"><span class="cat"><?= e($n['category'] ?? '') ?></span><span class="date"><?= e(fr_date($n['date'] ?? '')) ?></span></div>
+        <h3><?= e($n['title'] ?? '') ?></h3>
+        <p><?= e($n['excerpt'] ?? '') ?></p>
       </a>
-      <a class="news-card reveal" data-d="1" href="actualites.html">
-        <div class="flex-between"><span class="cat">Partenariat</span><span class="date">11 mai 2026</span></div>
-        <h3>Renouvellement du partenariat avec Klyde Avocats</h3>
-        <p>L'association a le plaisir d'annoncer la reconduction de son partenariat avec le cabinet lyonnais.</p>
-      </a>
-      <a class="news-card reveal" data-d="2" href="actualites.html">
-        <div class="flex-between"><span class="cat">Intervention</span><span class="date">7 avril 2026</span></div>
-        <h3>Mise en situation professionnelle avec Bredin Prat</h3>
-        <p>Une dernière mise en situation animée par Maître Paul Worms, counsel au sein du cabinet.</p>
-      </a>
+      <?php endforeach; ?>
     </div>
   </div>
 </section>
@@ -289,58 +242,12 @@
           <p>Licence en droit ou en gestion, dossier, CV, lettre de motivation et entretien. Faites le premier pas vers un profil rare et recherché.</p>
         </div>
         <div class="cta-row" style="margin:0">
-          <a class="btn btn-brass" href="admissions.html">Candidater <span class="arw">→</span></a>
-          <a class="btn btn-ghost" href="contact.html">Nous contacter</a>
+          <a class="btn btn-brass" href="admissions.php">Candidater <span class="arw">→</span></a>
+          <a class="btn btn-ghost" href="contact.php">Nous contacter</a>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-</main>
-
-<!-- FOOTER -->
-<footer class="site-footer">
-  <div class="container">
-    <div class="footer-top">
-      <div class="f-brand">
-        <div class="mono-mark">D<b>I</b>F</div>
-        <p>Master Droit &amp; Ingénierie Financière — Association du Master, Faculté de Droit, Université Jean Moulin Lyon 3.</p>
-      </div>
-      <div class="footer-col">
-        <h4>Formation</h4>
-        <ul>
-          <li><a href="le-master.html">Le Master</a></li>
-          <li><a href="formation.html">La Formation</a></li>
-          <li><a href="admissions.html">Admissions</a></li>
-          <li><a href="formation.html#debouches">Débouchés</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h4>Le Réseau</h4>
-        <ul>
-          <li><a href="reseau.html">Partenaires</a></li>
-          <li><a href="reseau.html#promotions">Promotions</a></li>
-          <li><a href="actualites.html">Actualités</a></li>
-          <li><a href="contact.html#partenaire">Devenir partenaire</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h4>Contact</h4>
-        <ul>
-          <li><a href="mailto:associationdif1999@gmail.com">associationdif1999@gmail.com</a></li>
-          <li><a href="https://facdedroit.univ-lyon3.fr/master-droit-et-ingenierie-financiere-2" target="_blank" rel="noopener">Faculté de Droit Lyon 3</a></li>
-          <li><a href="contact.html">Nous écrire</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <span>© 1999–2026 Association Droit &amp; Ingénierie Financière</span>
-      <span>Université Jean Moulin Lyon 3</span>
-    </div>
-  </div>
-</footer>
-
-<script src="assets/js/dif.js"></script>
-</body>
-</html>
+<?php include __DIR__ . '/inc/footer.php'; ?>

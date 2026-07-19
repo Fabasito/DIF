@@ -1,0 +1,37 @@
+{
+    "hero": {
+        "kicker": "Université Jean Moulin Lyon 3 · depuis 1999",
+        "title": "Le droit des affaires, l'exigence de la",
+        "accent": "finance.",
+        "subtitle": "Une formation sélective qui forge des juristes-financiers à double compétence, immédiatement opérationnels et reconnus bien au-delà de Lyon."
+    },
+    "stats": [
+        {
+            "value": "400+",
+            "label": "diplômés dans le monde"
+        },
+        {
+            "value": "~20",
+            "label": "étudiants par promotion"
+        },
+        {
+            "value": "2",
+            "label": "stages longue durée"
+        },
+        {
+            "value": "25e",
+            "label": "promotion en 2026"
+        }
+    ],
+    "parrain": {
+        "quote": "C'est une formation exigeante, reconnue pour la finesse de son approche et la rareté de ses profils à double compétence. Elle a profondément marqué ma trajectoire. Per Aspera Ad Astra.",
+        "name": "Maître Thibaut Lechoux",
+        "role": "Parrain de la promotion 2026 · Ancien étudiant du Master"
+    },
+    "contact": {
+        "email": "associationdif1999@gmail.com",
+        "faculty_url": "https://facdedroit.univ-lyon3.fr/master-droit-et-ingenierie-financiere-2",
+        "responsable_nom": "Quentin Nemoz-Rajot",
+        "responsable_email": "quentin.nemoz-rajot@univ-lyon3.fr"
+    }
+}

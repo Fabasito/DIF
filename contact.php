@@ -1,0 +1,95 @@
+<?php
+require_once __DIR__ . '/inc/data.php';
+$title = 'Contact — Master Droit & Ingénierie Financière | Lyon 3';
+$desc  = 'Contacter le Master Droit et Ingénierie Financière : responsable pédagogique, association des étudiants et Faculté de Droit de l\'Université Jean Moulin Lyon 3.';
+$active = 'contact';
+$site = load_json('site', []);
+$email = $site['contact']['email'] ?? 'associationdif1999@gmail.com';
+$faculty = $site['contact']['faculty_url'] ?? 'https://facdedroit.univ-lyon3.fr/master-droit-et-ingenierie-financiere-2';
+$resp_nom = $site['contact']['responsable_nom'] ?? 'Quentin Nemoz-Rajot';
+$resp_email = $site['contact']['responsable_email'] ?? 'quentin.nemoz-rajot@univ-lyon3.fr';
+$extra_head = <<<CSS
+<style>
+  .field { display:flex; flex-direction:column; gap:.4rem; margin-bottom:1.1rem; }
+  .field label { font-family:var(--mono); font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); }
+  .field input, .field select, .field textarea {
+    font:inherit; font-size:.95rem; padding:.8rem .9rem; background:var(--surface); color:var(--text);
+    border:1px solid var(--line); border-radius:var(--radius); width:100%;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus { outline:2px solid var(--brass); outline-offset:1px; border-color:var(--brass); }
+  .field textarea { min-height:130px; resize:vertical; }
+  .contact-info a { color:var(--brass); }
+  .info-card { display:flex; gap:1rem; padding:1.4rem 0; border-top:1px solid var(--line); }
+  .info-card:last-child{ border-bottom:1px solid var(--line); }
+  .info-card .ic { color:var(--brass); flex:0 0 auto; }
+  .info-card h3 { font-size:1.1rem; margin-bottom:.2rem; }
+  .info-card p { margin:0; color:var(--text-2); font-size:.93rem; }
+</style>
+CSS;
+include __DIR__ . '/inc/head.php';
+?>
+
+<section class="page-hero">
+  <div class="container">
+    <p class="crumb"><a href="index.php">Accueil</a> / Contact</p>
+    <h1>Parlons de votre projet.</h1>
+    <p class="lead">Candidats, étudiants, diplômés, cabinets et entreprises : l'équipe pédagogique et l'association du Master sont à votre écoute.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="split" style="align-items:start">
+      <div class="contact-info">
+        <p class="eyebrow">Nous joindre</p>
+        <h2>Les bons interlocuteurs.</h2>
+        <div class="info-card">
+          <svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 6 10 7L22 6"/></svg>
+          <div><h3>Association des étudiants</h3><p><a href="mailto:<?= e($email) ?>"><?= e($email) ?></a><br>Vie du Master, partenariats, actualités.</p></div>
+        </div>
+        <div class="info-card">
+          <svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
+          <div><h3>Responsable pédagogique</h3><p><?= e($resp_nom) ?> · Maître de conférences<br><a href="mailto:<?= e($resp_email) ?>"><?= e($resp_email) ?></a></p></div>
+        </div>
+        <div class="info-card">
+          <svg class="ic" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21s-7-6.3-7-11a7 7 0 0 1 14 0c0 4.7-7 11-7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>
+          <div><h3>Faculté de Droit</h3><p>Université Jean Moulin Lyon 3<br><a href="<?= e($faculty) ?>" target="_blank" rel="noopener">Voir la page de la formation</a></p></div>
+        </div>
+      </div>
+
+      <div class="reveal">
+        <div class="card" id="partenaire" style="padding:clamp(1.6rem,3vw,2.2rem)">
+          <h3 style="font-size:1.4rem;margin-bottom:1.2rem">Écrivez-nous</h3>
+          <form onsubmit="return false" aria-label="Formulaire de contact">
+            <div class="field"><label for="nom">Nom &amp; prénom</label><input id="nom" name="nom" type="text" autocomplete="name" required></div>
+            <div class="field"><label for="cmail">Adresse e-mail</label><input id="cmail" name="email" type="email" autocomplete="email" required></div>
+            <div class="field"><label for="sujet">Vous êtes</label>
+              <select id="sujet" name="sujet">
+                <option>Candidat·e au Master</option>
+                <option>Étudiant·e / diplômé·e</option>
+                <option>Cabinet ou entreprise (partenariat)</option>
+                <option>Autre</option>
+              </select>
+            </div>
+            <div class="field"><label for="message">Message</label><textarea id="message" name="message" required></textarea></div>
+            <button class="btn btn-brass" type="submit" style="width:100%;justify-content:center">Envoyer <span class="arw">→</span></button>
+            <p style="font-size:.78rem;color:var(--muted);margin-top:.9rem">Ce formulaire est une maquette de démonstration. En production, il sera relié à la boîte de l'association ou à un service d'envoi d'e-mails.</p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-tight">
+  <div class="container">
+    <div class="cta-band reveal">
+      <div class="flex-between" style="align-items:end">
+        <div><p class="eyebrow on-ink">Cabinets &amp; entreprises</p><h2>Devenez partenaire du Master DIF.</h2><p>Associez votre nom à une formation d'excellence, accueillez des stagiaires et rencontrez nos futurs diplômés.</p></div>
+        <div class="cta-row" style="margin:0"><a class="btn btn-brass" href="mailto:<?= e($email) ?>">Proposer un partenariat <span class="arw">→</span></a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<?php include __DIR__ . '/inc/footer.php'; ?>

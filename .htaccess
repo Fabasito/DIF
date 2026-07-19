@@ -1,0 +1,14 @@
+DirectoryIndex index.php index.html
+
+# Empêche l'accès web direct aux includes PHP
+<IfModule mod_authz_core.c>
+  <FilesMatch "\.(tmp)$">
+    Require all denied
+  </FilesMatch>
+</IfModule>
+<IfModule !mod_authz_core.c>
+  <FilesMatch "\.(tmp)$">
+    Order allow,deny
+    Deny from all
+  </FilesMatch>
+</IfModule>

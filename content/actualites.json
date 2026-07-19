@@ -1,0 +1,74 @@
+[
+    {
+        "id": "a1",
+        "date": "2026-05-12",
+        "category": "Vie associative",
+        "title": "Remerciements aux structures de stage des M1",
+        "excerpt": "Les étudiants du Master 1 ont commencé leur stage de fin d'année, d'une durée de trois mois.",
+        "body": "Depuis le début du mois de mai, les étudiants du Master 1 Droit et Ingénierie Financière ont commencé leur stage de fin d'année, d'une durée de trois mois. L'association remercie chaleureusement les structures qui les accueillent."
+    },
+    {
+        "id": "a2",
+        "date": "2026-05-11",
+        "category": "Partenariat",
+        "title": "Renouvellement du partenariat Klyde Avocats",
+        "excerpt": "L'association annonce la reconduction de son partenariat avec le cabinet lyonnais Klyde Avocats.",
+        "body": "L'association du Master Droit et Ingénierie Financière a le plaisir de vous annoncer le renouvellement de son partenariat avec Klyde Avocats. Basé à Lyon, le cabinet accompagne depuis trois ans les étudiants du Master."
+    },
+    {
+        "id": "a3",
+        "date": "2026-04-08",
+        "category": "Événement",
+        "title": "Remerciements aux structures de stage des M2",
+        "excerpt": "Les étudiants du Master 2 ont entamé leur stage de fin d'études, de trois mois minimum.",
+        "body": "Depuis le début du mois d'avril, les étudiants du Master 2 Droit et Ingénierie Financière ont entamé leur stage de fin d'études, d'une durée minimale de trois mois."
+    },
+    {
+        "id": "a4",
+        "date": "2026-04-07",
+        "category": "Intervention",
+        "title": "Mise en situation professionnelle avec Bredin Prat",
+        "excerpt": "Une mise en situation animée par Maître Paul Worms, counsel au sein du cabinet.",
+        "body": "Le mardi 17 mars, la dernière mise en situation professionnelle a été organisée en présence de Maître Paul Worms, counsel au sein du cabinet Bredin Prat."
+    },
+    {
+        "id": "a5",
+        "date": "2026-03-26",
+        "category": "Conférence",
+        "title": "Ultime session des conférences d'actualité",
+        "excerpt": "M1 et M2 réunis pour la dernière session du cycle de conférences de l'année.",
+        "body": "Le 10 mars 2026, les étudiants de M1 et M2 du Master DIF se sont réunis une dernière fois à l'occasion de l'ultime session des conférences d'actualité organisées cette année."
+    },
+    {
+        "id": "a6",
+        "date": "2026-03-11",
+        "category": "Conférence",
+        "title": "Conférence de Maître Claire Garcia",
+        "excerpt": "Avocate en contentieux des affaires et ancienne étudiante du Master, face aux M1 et M2.",
+        "body": "Les étudiants du Master 1 et Master 2 DIF ont eu l'opportunité d'assister à une conférence animée par Maître Claire Garcia, avocate en contentieux des affaires et ancienne étudiante du Master."
+    },
+    {
+        "id": "a7",
+        "date": "2026-03-10",
+        "category": "Conférence",
+        "title": "Cinquième session des conférences d'actualité",
+        "excerpt": "Nouvelle rencontre entre les promotions autour de l'actualité juridique et financière.",
+        "body": "Le 5 mars 2026, les étudiants de M1 et M2 du Master DIF se sont réunis pour la cinquième session des conférences d'actualité organisées cette année."
+    },
+    {
+        "id": "a8",
+        "date": "2026-03-06",
+        "category": "Intervention",
+        "title": "Mise en situation M&A au cabinet Kelten",
+        "excerpt": "Les étudiants accueillis pour un cas pratique consacré au M&A – Corporate.",
+        "body": "Dans le cadre d'une mise en situation consacrée au M&A – Corporate, l'ensemble des étudiants du Master Droit et Ingénierie Financière ont été accueillis par le cabinet d'avocats Kelten."
+    },
+    {
+        "id": "a9",
+        "date": "2026-03-05",
+        "category": "Intervention",
+        "title": "Mise en situation en fiscalité",
+        "excerpt": "Une réflexion approfondie menée sur un cas pratique de fiscalité de l'entreprise.",
+        "body": "À l'occasion de notre mise en situation professionnelle en fiscalité en date du 2 mars, les étudiants ont mené une réflexion approfondie sur un cas pratique de fiscalité de l'entreprise."
+    }
+]

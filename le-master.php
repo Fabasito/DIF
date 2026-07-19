@@ -1,50 +1,19 @@
-<!doctype html>
-<html lang="fr">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Le Master — Droit & Ingénierie Financière | Lyon 3</title>
-<meta name="description" content="Le mot du directeur, l'histoire et les valeurs du Master Droit et Ingénierie Financière de l'Université Jean Moulin Lyon 3.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..500&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
-<meta name="theme-color" content="#0f1a33">
-<link rel="stylesheet" href="assets/css/dif.css">
-</head>
-<body>
-<a class="skip-link" href="#main">Aller au contenu</a>
+<?php
+require_once __DIR__ . '/inc/data.php';
+$title = 'Le Master — Droit & Ingénierie Financière | Lyon 3';
+$desc  = 'Le mot du directeur, l\'histoire et les valeurs du Master Droit et Ingénierie Financière de l\'Université Jean Moulin Lyon 3.';
+$active = 'le-master';
 
-<header class="site-header">
-  <div class="container bar">
-    <a class="brand" href="index.html" aria-label="Accueil"><span class="mono-mark">D<b>I</b>F</span><span class="brand-sub">Master Droit &amp;<br>Ingénierie Financière<br>Lyon 3</span></a>
-    <nav class="nav primary" aria-label="Navigation principale">
-      <a href="le-master.html" aria-current="page">Le Master</a>
-      <a href="formation.html">La Formation</a>
-      <a href="admissions.html">Admissions</a>
-      <a href="reseau.html">Le Réseau</a>
-      <a href="actualites.html">Actualités</a>
-      <a href="contact.html">Contact</a>
-    </nav>
-    <div class="header-actions">
-      <button class="theme-toggle" data-theme-toggle aria-label="Changer de thème">
-        <svg class="moon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
-        <svg class="sun" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4 12H2M22 12h-2M5 5l1.5 1.5M17.5 17.5 19 19M19 5l-1.5 1.5M6.5 17.5 5 19"/></svg>
-      </button>
-      <a class="btn btn-brass" href="admissions.html">Candidater <span class="arw">→</span></a>
-      <button class="burger" data-burger aria-label="Ouvrir le menu"><span></span><span></span><span></span></button>
-    </div>
-  </div>
-</header>
-<div class="mobile-nav" aria-label="Menu mobile">
-  <a href="le-master.html">Le Master</a><a href="formation.html">La Formation</a><a href="admissions.html">Admissions</a><a href="reseau.html">Le Réseau</a><a href="actualites.html">Actualités</a><a href="contact.html">Contact</a><a class="btn btn-brass" href="admissions.html">Candidater →</a>
-</div>
+$site = load_json('site', []);
+$parrain = $site['parrain'] ?? null;
+$resp_email = $site['contact']['responsable_email'] ?? 'quentin.nemoz-rajot@univ-lyon3.fr';
 
-<main id="main">
+include __DIR__ . '/inc/head.php';
+?>
 
 <section class="page-hero">
   <div class="container">
-    <p class="crumb"><a href="index.html">Accueil</a> / Le Master</p>
+    <p class="crumb"><a href="index.php">Accueil</a> / Le Master</p>
     <h1>Une formation pionnière, devenue une référence.</h1>
     <p class="lead">Créé à Lyon 3, le Master Droit et Ingénierie Financière mêle depuis son origine le droit et la finance — une singularité aujourd'hui reconnue par les professionnels comme par les étudiants.</p>
   </div>
@@ -69,7 +38,6 @@
   </div>
 </section>
 
-<!-- MOT DU DIRECTEUR -->
 <section class="section alt">
   <div class="container">
     <div class="split">
@@ -92,7 +60,7 @@
           <div style="border-top:1px solid var(--line)">
             <span class="tag">Contact pédagogique</span>
             <h3 style="font-size:1.2rem">Quentin Nemoz-Rajot</h3>
-            <p><a class="link-arrow" href="mailto:quentin.nemoz-rajot@univ-lyon3.fr">quentin.nemoz-rajot@univ-lyon3.fr</a></p>
+            <p><a class="link-arrow" href="mailto:<?= e($resp_email) ?>"><?= e($resp_email) ?></a></p>
           </div>
         </div>
       </div>
@@ -100,7 +68,6 @@
   </div>
 </section>
 
-<!-- PILIERS -->
 <section class="section">
   <div class="container">
     <div class="sec-head"><p class="eyebrow">Nos valeurs</p><h2>Les piliers de l'excellence.</h2></div>
@@ -113,17 +80,18 @@
   </div>
 </section>
 
-<!-- PARRAIN -->
+<?php if ($parrain): ?>
 <section class="section ink">
   <div class="container container-narrow">
     <p class="eyebrow center on-ink">Le parrain de la promotion 2026</p>
     <div class="quote reveal">
-      <blockquote>« C'est une formation exigeante, reconnue pour la finesse de son approche et la rareté de ses profils à double compétence. Elle a profondément marqué ma trajectoire. Per Aspera Ad Astra. »</blockquote>
-      <div class="who">Maître Thibaut Lechoux</div>
-      <div class="role">Parrain de la promotion 2026 · Ancien étudiant du Master</div>
+      <blockquote>« <?= e($parrain['quote'] ?? '') ?> »</blockquote>
+      <div class="who"><?= e($parrain['name'] ?? '') ?></div>
+      <div class="role"><?= e($parrain['role'] ?? '') ?></div>
     </div>
   </div>
 </section>
+<?php endif; ?>
 
 <section class="section-tight">
   <div class="container">
@@ -135,27 +103,12 @@
           <p>Maquette M1 et M2, objectifs, stages et débouchés : tout le détail de la formation.</p>
         </div>
         <div class="cta-row" style="margin:0">
-          <a class="btn btn-brass" href="formation.html">Voir la formation <span class="arw">→</span></a>
-          <a class="btn btn-ghost" href="admissions.html">Candidater</a>
+          <a class="btn btn-brass" href="formation.php">Voir la formation <span class="arw">→</span></a>
+          <a class="btn btn-ghost" href="admissions.php">Candidater</a>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-</main>
-
-<footer class="site-footer">
-  <div class="container">
-    <div class="footer-top">
-      <div class="f-brand"><div class="mono-mark">D<b>I</b>F</div><p>Master Droit &amp; Ingénierie Financière — Association du Master, Faculté de Droit, Université Jean Moulin Lyon 3.</p></div>
-      <div class="footer-col"><h4>Formation</h4><ul><li><a href="le-master.html">Le Master</a></li><li><a href="formation.html">La Formation</a></li><li><a href="admissions.html">Admissions</a></li><li><a href="formation.html#debouches">Débouchés</a></li></ul></div>
-      <div class="footer-col"><h4>Le Réseau</h4><ul><li><a href="reseau.html">Partenaires</a></li><li><a href="reseau.html#promotions">Promotions</a></li><li><a href="actualites.html">Actualités</a></li><li><a href="contact.html#partenaire">Devenir partenaire</a></li></ul></div>
-      <div class="footer-col"><h4>Contact</h4><ul><li><a href="mailto:associationdif1999@gmail.com">associationdif1999@gmail.com</a></li><li><a href="https://facdedroit.univ-lyon3.fr/master-droit-et-ingenierie-financiere-2" target="_blank" rel="noopener">Faculté de Droit Lyon 3</a></li><li><a href="contact.html">Nous écrire</a></li></ul></div>
-    </div>
-    <div class="footer-bottom"><span>© 1999–2026 Association Droit &amp; Ingénierie Financière</span><span>Université Jean Moulin Lyon 3</span></div>
-  </div>
-</footer>
-<script src="assets/js/dif.js"></script>
-</body>
-</html>
+<?php include __DIR__ . '/inc/footer.php'; ?>

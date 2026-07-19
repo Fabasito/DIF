@@ -1,16 +1,13 @@
-<!doctype html>
-<html lang="fr">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Admissions & Candidature — Master Droit & Ingénierie Financière | Lyon 3</title>
-<meta name="description" content="Conditions d'admission, profils recherchés et procédure de candidature au Master 1 et Master 2 Droit et Ingénierie Financière de Lyon 3.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..500&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
-<meta name="theme-color" content="#0f1a33">
-<link rel="stylesheet" href="assets/css/dif.css">
+<?php
+require_once __DIR__ . '/inc/data.php';
+$title = 'Admissions & Candidature — Master Droit & Ingénierie Financière | Lyon 3';
+$desc  = 'Conditions d\'admission, profils recherchés et procédure de candidature au Master 1 et Master 2 Droit et Ingénierie Financière de Lyon 3.';
+$active = 'admissions';
+$site = load_json('site', []);
+$faculty = $site['contact']['faculty_url'] ?? 'https://facdedroit.univ-lyon3.fr/master-droit-et-ingenierie-financiere-2';
+$resp_email = $site['contact']['responsable_email'] ?? 'quentin.nemoz-rajot@univ-lyon3.fr';
+$email = $site['contact']['email'] ?? 'associationdif1999@gmail.com';
+$extra_head = <<<CSS
 <style>
   .step { display:grid; grid-template-columns:auto 1fr; gap:1.6rem; padding:1.8rem 0; border-top:1px solid var(--line); }
   .step:last-child{ border-bottom:1px solid var(--line); }
@@ -23,44 +20,21 @@
   .acc-head .pm { font-family:var(--mono); color:var(--brass); transition:transform .25s ease; }
   .acc-item.open .acc-head .pm { transform:rotate(45deg); }
   .acc-body { max-height:0; overflow:hidden; transition:max-height .3s ease; }
-  .acc-item.open .acc-body { max-height:340px; }
+  .acc-item.open .acc-body { max-height:360px; }
   .acc-body p { color:var(--text-2); padding-bottom:1.3rem; margin:0; }
 </style>
-</head>
-<body>
-<a class="skip-link" href="#main">Aller au contenu</a>
-
-<header class="site-header">
-  <div class="container bar">
-    <a class="brand" href="index.html" aria-label="Accueil"><span class="mono-mark">D<b>I</b>F</span><span class="brand-sub">Master Droit &amp;<br>Ingénierie Financière<br>Lyon 3</span></a>
-    <nav class="nav primary" aria-label="Navigation principale">
-      <a href="le-master.html">Le Master</a><a href="formation.html">La Formation</a><a href="admissions.html" aria-current="page">Admissions</a><a href="reseau.html">Le Réseau</a><a href="actualites.html">Actualités</a><a href="contact.html">Contact</a>
-    </nav>
-    <div class="header-actions">
-      <button class="theme-toggle" data-theme-toggle aria-label="Changer de thème">
-        <svg class="moon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
-        <svg class="sun" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4 12H2M22 12h-2M5 5l1.5 1.5M17.5 17.5 19 19M19 5l-1.5 1.5M6.5 17.5 5 19"/></svg>
-      </button>
-      <a class="btn btn-brass" href="#candidature">Candidater <span class="arw">→</span></a>
-      <button class="burger" data-burger aria-label="Ouvrir le menu"><span></span><span></span><span></span></button>
-    </div>
-  </div>
-</header>
-<div class="mobile-nav" aria-label="Menu mobile">
-  <a href="le-master.html">Le Master</a><a href="formation.html">La Formation</a><a href="admissions.html">Admissions</a><a href="reseau.html">Le Réseau</a><a href="actualites.html">Actualités</a><a href="contact.html">Contact</a><a class="btn btn-brass" href="#candidature">Candidater →</a>
-</div>
-
-<main id="main">
+CSS;
+include __DIR__ . '/inc/head.php';
+?>
 
 <section class="page-hero">
   <div class="container">
-    <p class="crumb"><a href="index.html">Accueil</a> / Admissions</p>
+    <p class="crumb"><a href="index.php">Accueil</a> / Admissions</p>
     <h1>Rejoignez une promotion d'exception.</h1>
     <p class="lead">Le Master DIF sélectionne une vingtaine d'étudiants par année. L'admission repose sur l'examen d'un dossier, d'un CV et d'une lettre de motivation, puis d'un entretien pour le Master 1.</p>
   </div>
 </section>
 
-<!-- PROFILS -->
 <section class="section">
   <div class="container">
     <div class="sec-head"><p class="eyebrow">À qui s'adresse le Master</p><h2>Deux portes d'entrée.</h2></div>
@@ -79,7 +53,6 @@
   </div>
 </section>
 
-<!-- PROCEDURE -->
 <section class="section alt" id="candidature">
   <div class="container">
     <div class="split">
@@ -87,7 +60,7 @@
         <p class="eyebrow">La procédure</p>
         <h2>Quatre étapes vers l'admission.</h2>
         <p>Un processus lisible et exigeant, pensé pour révéler la motivation et le potentiel de chaque candidat.</p>
-        <a class="btn btn-brass mt-3" href="https://facdedroit.univ-lyon3.fr/master-droit-et-ingenierie-financiere-2" target="_blank" rel="noopener">Candidater sur le portail Lyon 3 <span class="arw">→</span></a>
+        <a class="btn btn-brass mt-3" href="<?= e($faculty) ?>" target="_blank" rel="noopener">Candidater sur le portail Lyon 3 <span class="arw">→</span></a>
         <p style="font-size:.85rem;color:var(--muted);margin-top:1rem">Les candidatures s'effectuent via la plateforme officielle de l'Université Jean Moulin Lyon 3.</p>
       </div>
       <div class="reveal">
@@ -100,7 +73,6 @@
   </div>
 </section>
 
-<!-- CE QUI FAIT LA DIFFERENCE -->
 <section class="section ink">
   <div class="container">
     <div class="sec-head center"><p class="eyebrow center on-ink">Un dossier qui se démarque</p><h2>Ce que nous recherchons.</h2></div>
@@ -112,7 +84,6 @@
   </div>
 </section>
 
-<!-- FAQ -->
 <section class="section">
   <div class="container container-narrow">
     <div class="sec-head center"><p class="eyebrow center">Questions fréquentes</p><h2>Vous hésitez encore&nbsp;?</h2></div>
@@ -121,24 +92,9 @@
       <div class="acc-item"><button class="acc-head" aria-expanded="false">Combien d'étudiants par promotion&nbsp;? <span class="pm">+</span></button><div class="acc-body"><p>Une vingtaine d'étudiants dès le Master 1, pour garantir un encadrement privilégié et un suivi personnalisé.</p></div></div>
       <div class="acc-item"><button class="acc-head" aria-expanded="false">Les stages sont-ils obligatoires&nbsp;? <span class="pm">+</span></button><div class="acc-body"><p>Oui. Un stage de 3 mois minimum en Master 1, puis un stage de 3 à 6 mois en Master 2, chacun donnant lieu à un mémoire.</p></div></div>
       <div class="acc-item"><button class="acc-head" aria-expanded="false">Où déposer ma candidature&nbsp;? <span class="pm">+</span></button><div class="acc-body"><p>Les candidatures s'effectuent sur la plateforme officielle de l'Université Jean Moulin Lyon 3. Le lien figure ci-dessus dans la section « La procédure ».</p></div></div>
-      <div class="acc-item"><button class="acc-head" aria-expanded="false">Qui contacter pour plus d'informations&nbsp;? <span class="pm">+</span></button><div class="acc-body"><p>Le responsable pédagogique, Quentin Nemoz-Rajot (quentin.nemoz-rajot@univ-lyon3.fr), ou l'association des étudiants (associationdif1999@gmail.com).</p></div></div>
+      <div class="acc-item"><button class="acc-head" aria-expanded="false">Qui contacter pour plus d'informations&nbsp;? <span class="pm">+</span></button><div class="acc-body"><p>Le responsable pédagogique, Quentin Nemoz-Rajot (<?= e($resp_email) ?>), ou l'association des étudiants (<?= e($email) ?>).</p></div></div>
     </div>
   </div>
 </section>
 
-</main>
-
-<footer class="site-footer">
-  <div class="container">
-    <div class="footer-top">
-      <div class="f-brand"><div class="mono-mark">D<b>I</b>F</div><p>Master Droit &amp; Ingénierie Financière — Association du Master, Faculté de Droit, Université Jean Moulin Lyon 3.</p></div>
-      <div class="footer-col"><h4>Formation</h4><ul><li><a href="le-master.html">Le Master</a></li><li><a href="formation.html">La Formation</a></li><li><a href="admissions.html">Admissions</a></li><li><a href="formation.html#debouches">Débouchés</a></li></ul></div>
-      <div class="footer-col"><h4>Le Réseau</h4><ul><li><a href="reseau.html">Partenaires</a></li><li><a href="reseau.html#promotions">Promotions</a></li><li><a href="actualites.html">Actualités</a></li><li><a href="contact.html#partenaire">Devenir partenaire</a></li></ul></div>
-      <div class="footer-col"><h4>Contact</h4><ul><li><a href="mailto:associationdif1999@gmail.com">associationdif1999@gmail.com</a></li><li><a href="https://facdedroit.univ-lyon3.fr/master-droit-et-ingenierie-financiere-2" target="_blank" rel="noopener">Faculté de Droit Lyon 3</a></li><li><a href="contact.html">Nous écrire</a></li></ul></div>
-    </div>
-    <div class="footer-bottom"><span>© 1999–2026 Association Droit &amp; Ingénierie Financière</span><span>Université Jean Moulin Lyon 3</span></div>
-  </div>
-</footer>
-<script src="assets/js/dif.js"></script>
-</body>
-</html>
+<?php include __DIR__ . '/inc/footer.php'; ?>

@@ -1,0 +1,4 @@
+# Fichiers temporaires d'écriture atomique du CMS
+content/*.tmp*
+# Logs
+*.log

@@ -1,28 +1,27 @@
-# Master Droit & Ingénierie Financière — Refonte du site
+# Master Droit & Ingénierie Financière — Site + CMS
 
 Refonte complète du site [droit-ingenieriefinanciere.fr](http://droit-ingenieriefinanciere.fr/),
 le site du **Master 1 & 2 Droit et Ingénierie Financière (DIF)** de l'Université Jean Moulin Lyon 3.
 
-Il s'agit d'une **proposition de refonte** : un site statique moderne, rapide et sans dépendance à
-WordPress, construit en HTML / CSS / JavaScript vanilla. Aucune étape de build n'est nécessaire.
+Site en **PHP + contenu JSON** (aucune base de données), doté d'un **back-office privé** (`/admin`)
+permettant à l'association de gérer le contenu sans toucher au code.
 
 ---
 
-## Pourquoi une refonte
+## Pourquoi cette refonte
 
 Le site actuel tourne sous **WordPress 5.8.13** (version de 2021, non maintenue, faille de sécurité)
-avec le thème gratuit *Sydney*. Le contenu est riche et de qualité, mais la présentation est datée,
-peu hiérarchisée et non pensée pour convertir des candidats.
+avec le thème gratuit *Sydney*. Contenu riche, mais présentation datée et surface d'attaque WordPress.
 
-| | Site actuel | Refonte proposée |
+| | Site actuel | Refonte |
 |---|---|---|
-| Socle | WordPress 5.8.13 (obsolète) + thème Sydney | Site statique HTML/CSS/JS, zéro dépendance |
-| Sécurité / maintenance | Surface d'attaque WordPress, mises à jour | Aucune base de données, hébergement statique |
-| Identité visuelle | Bleu marine + rouge terne, gabarit générique | Marine « nuit sur le Rhône » + accent laiton, système sur-mesure |
-| Parcours candidat | Page « Admissions » inexistante | Page Admissions dédiée (procédure, profils, FAQ) |
-| Performance | Lourd (plugins, scripts) | Léger, une CSS + un JS, chargement rapide |
+| Socle | WordPress 5.8.13 + thème Sydney | PHP 8 + JSON, **sans base de données** |
+| Édition du contenu | WordPress (lourd) | Back-office `/admin` léger, protégé |
+| Sécurité | Surface WordPress, plugins | Session + mot de passe hashé + CSRF |
+| Identité visuelle | Marine + rouge terne, gabarit générique | Marine « nuit sur le Rhône » + accent laiton, sur-mesure |
+| Parcours candidat | Pas de page Admissions | Page Admissions dédiée (procédure, FAQ) |
+| Performance | Lourd | Léger : une CSS, un JS, pages statiques rendues côté serveur |
 | Accessibilité | Limitée | Sémantique, focus visible, thème sombre, `prefers-reduced-motion` |
-| Responsive | Thème daté | Mobile-first, menu plein écran, grilles fluides |
 
 ---
 
@@ -31,49 +30,100 @@ peu hiérarchisée et non pensée pour convertir des candidats.
 **Concept** : le sujet vit à l'intersection du **droit** (tradition, gravité) et de la **finance**
 (précision, chiffres), ancré à Lyon (le Rhône, le Palais de l'Université illuminé la nuit).
 
-- **Couleurs** — encre marine `#0f1a33` (fond hero/footer), accent **laiton `#c2a15b`** (seul accent,
-  très retenu), papier froid `#f5f6f8`. Thèmes clair **et** sombre gérés au niveau des tokens CSS.
-- **Typographie — la dualité comme signature** :
-  - *Fraunces* (serif éditoriale) → le droit, la gravité ;
-  - *Inter* (sans) → la clarté ;
-  - *IBM Plex Mono* → **tous les chiffres et labels**, comme la lecture d'un instrument financier.
-- **Layout** — rythme éditorial, grille 12 colonnes, filets or, « ruban » de chiffres-clés façon
-  cotation sous le hero, motif récurrent à deux colonnes *Droit / Finance*, révélations au scroll.
+- **Couleurs** — encre marine `#0f1a33`, accent **laiton `#c2a15b`**, papier froid `#f5f6f8`.
+  Thèmes clair **et** sombre (tokens CSS).
+- **Typographie — la dualité comme signature** : *Fraunces* (serif, le droit) · *Inter* (sans, la clarté)
+  · *IBM Plex Mono* pour **tous les chiffres** (la finance, comme une bande de cotation).
+- **Layout** — rythme éditorial, grille 12 colonnes, filets or, motif récurrent *Droit / Finance*.
 
 ---
 
-## Arborescence
+## Architecture
 
 ```
-index.html          Accueil — hero, double compétence, piliers, formation, débouchés, partenaires, actualités
-le-master.html      Le Master — histoire, mot du directeur, valeurs, parrain
-formation.html      La Formation — maquette M1/M2 (onglets), objectifs, débouchés
-admissions.html     Admissions — profils, procédure en 4 étapes, FAQ  (NOUVEAU)
-reseau.html         Le Réseau — partenaires, promotions, devenir partenaire
-actualites.html     Actualités — grille d'articles, filtres par catégorie
-contact.html        Contact — interlocuteurs, formulaire, partenariats
-assets/
-  css/dif.css       Design system complet (tokens, composants, thèmes)
-  js/dif.js         Thème clair/sombre, menu mobile, reveal, compteurs, onglets, accordéon
-  img/              Photo hero (berges du Rhône) et logo
+Pages publiques (PHP, rendues côté serveur — SEO friendly)
+  index.php  le-master.php  formation.php  admissions.php
+  reseau.php  actualites.php  contact.php
+
+inc/                 Code partagé
+  head.php           <head> + entête/nav (dédoublonné)
+  footer.php         pied de page
+  data.php           lecture/écriture JSON, helpers, registre des collections
+
+content/             CONTENU ÉDITABLE (écrit par le back-office)
+  site.json          accroche, chiffres-clés, parrain, coordonnées
+  actualites.json    articles / actualités
+  partenaires.json   cabinets & entreprises partenaires
+  promotions.json    promotions
+  temoignages.json   citations & témoignages (la 1re alimente la home)
+
+admin/               BACK-OFFICE PRIVÉ (connexion requise)
+  login.php  logout.php  index.php (tableau de bord)
+  collection.php       liste + réordonnancement + suppression
+  edit.php             ajout / modification d'un élément
+  settings.php         réglages du site (site.json)
+  bootstrap.php        session, authentification, CSRF, flash
+  config.php           identifiants (À PERSONNALISER)
+  layout.php  admin.css
+
+assets/              css/dif.css · js/dif.js · img/ (photo hero, logo, favicon)
+.htaccess            protections (index par défaut, blocage des includes)
 ```
 
-## Aperçu en local
+Le contenu géré depuis `/admin` est écrit dans `content/*.json` (écriture atomique) et
+**apparaît immédiatement** sur le site public, qui lit ces fichiers à chaque affichage.
 
-Aucune installation requise :
+---
+
+## Le back-office `/admin`
+
+Accessible **uniquement après connexion**. Il permet de gérer, sans toucher au code :
+
+- **Actualités** — ajouter / modifier / supprimer / réordonner les articles (titre, date, catégorie, résumé, contenu) ;
+- **Partenaires** — les cabinets et entreprises affichés sur *Le Réseau* et l'accueil ;
+- **Promotions** — la liste des promotions ;
+- **Citations & témoignages** — la première citation alimente le bloc de l'accueil ;
+- **Réglages du site** — accroche de l'accueil, chiffres-clés, parrain, coordonnées.
+
+**Sécurité** : session PHP durcie (cookie `HttpOnly`, `SameSite=Lax`, `Secure` en HTTPS),
+mot de passe **hashé** (`password_hash`), **jeton CSRF** sur toutes les actions, throttling
+à la connexion, déconnexion automatique après inactivité. Tout le contenu saisi est
+échappé à l'affichage (protection anti-XSS).
+
+### Identifiants par défaut — à changer avant la mise en ligne
+
+> Mot de passe par défaut : **`DIF-admin-2026`**
+
+1. Générez un nouveau hash :
+   ```bash
+   php -r 'echo password_hash("VOTRE_MOT_DE_PASSE", PASSWORD_DEFAULT), "\n";'
+   ```
+2. Collez-le dans `admin/config.php` → `ADMIN_PASSWORD_HASH`.
+3. Servez le site en **HTTPS** (le cookie de session passe alors en `Secure`).
+
+---
+
+## Lancer le site en local
+
+Nécessite **PHP 8+** :
 
 ```bash
-# ouvrir directement index.html, ou servir le dossier :
-python3 -m http.server 8000
-# puis http://localhost:8000
+php -S localhost:8000
+# Site :   http://localhost:8000
+# Admin :  http://localhost:8000/admin/   (mot de passe : DIF-admin-2026)
 ```
 
-## Notes
+## Mise en production
 
-- Les textes reprennent fidèlement le contenu du site actuel (mot du directeur, maquette,
-  partenaires, débouchés). Les logos partenaires sont représentés en typographie ; ils pourront
-  être remplacés par les logos officiels avec l'accord des cabinets.
-- Le formulaire de contact est une maquette front-end ; à relier en production à la boîte de
-  l'association ou à un service d'envoi d'e-mails.
-- Prochaines pistes : intégration des vrais trombinoscopes, plaquette PDF, CMS léger (ex. Decap/Netlify
-  CMS) pour que l'association publie les actualités sans toucher au code.
+Hébergement **PHP/Apache** (comme l'actuel hébergement WordPress). Copiez les fichiers,
+assurez-vous que le dossier `content/` est **accessible en écriture** par le serveur web
+(`chmod 775 content` ou propriété du user PHP), changez le mot de passe admin, activez HTTPS.
+
+## Notes & pistes
+
+- Textes fidèles au site actuel. Les **logos partenaires** sont en typographie (à remplacer par
+  les logos officiels avec l'accord des cabinets).
+- Le **formulaire de contact** est une maquette front-end ; à relier à la boîte de l'association
+  ou à un service d'e-mail en production.
+- Pistes : upload d'images pour les actualités, trombinoscopes des promotions, plaquette PDF,
+  et — si vous préférez un hébergement 100 % statique — bascule vers un CMS git (Decap) au lieu du back-office PHP.
