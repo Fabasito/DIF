@@ -428,6 +428,12 @@ body.nav-open .mobile-nav { transform: translateX(0); }
 .promo-figure img { width: 100%; border-radius: var(--radius); box-shadow: var(--shadow-md); }
 .promo-figure figcaption { font-family: var(--mono); font-size: .74rem; letter-spacing: .14em; text-transform: uppercase; color: var(--brass); margin-top: .8rem; }
 
+/* Marquee — trombinoscope défilant en boucle */
+.mq-track { scroll-snap-type: none; scroll-behavior: auto; cursor: grab; }
+.mq-track:active { cursor: grabbing; }
+.mq-track > * { flex: 0 0 clamp(148px, 15vw, 185px); scroll-snap-align: none; }
+.trombi-sec { margin-bottom: 1.5rem; }
+
 /* Trombinoscope */
 .trombi { display: grid; grid-template-columns: repeat(5, 1fr); gap: clamp(1rem, 2vw, 1.6rem); margin-bottom: 3rem; }
 @media (max-width: 900px) { .trombi { grid-template-columns: repeat(3, 1fr); } }

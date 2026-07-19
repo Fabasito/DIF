@@ -130,6 +130,86 @@
     update();
   });
 
+  /* ---- Marquee infini (trombinoscopes) ---- */
+  document.querySelectorAll("[data-marquee]").forEach(function (root) {
+    var track = root.querySelector(".mq-track");
+    if (!track || track.children.length === 0) return;
+    var dir = parseFloat(root.getAttribute("data-dir") || "1");
+    var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var originals = Array.prototype.slice.call(track.children);
+
+    function addSet() {
+      originals.forEach(function (el) {
+        var c = el.cloneNode(true);
+        c.setAttribute("aria-hidden", "true");
+        track.appendChild(c);
+      });
+    }
+    addSet();
+    var setWidth = track.children[originals.length].offsetLeft - track.children[0].offsetLeft;
+    var guard = 0;
+    while (setWidth > 0 && track.scrollWidth - setWidth < track.clientWidth + 200 && guard < 6) {
+      addSet(); guard++;
+    }
+    if (dir < 0) track.scrollLeft = setWidth;
+
+    function wrap() {
+      if (setWidth <= 0) return;
+      if (track.scrollLeft >= setWidth) track.scrollLeft -= setWidth;
+      else if (track.scrollLeft <= 0 && dir < 0) track.scrollLeft += setWidth;
+      else if (track.scrollLeft < 0) track.scrollLeft += setWidth;
+    }
+
+    var paused = false, idleTimer = null, last = null;
+    function hold(ms) {
+      paused = true;
+      clearTimeout(idleTimer);
+      idleTimer = setTimeout(function () { paused = false; }, ms || 2500);
+    }
+    root.addEventListener("pointerenter", function () { paused = true; clearTimeout(idleTimer); });
+    root.addEventListener("pointerleave", function () { paused = false; });
+    root.addEventListener("focusin", function () { paused = true; });
+    root.addEventListener("focusout", function () { paused = false; });
+    track.addEventListener("wheel", function () { hold(2500); }, { passive: true });
+    track.addEventListener("touchstart", function () { hold(3000); }, { passive: true });
+
+    function step() {
+      var c = track.firstElementChild;
+      return c ? (c.getBoundingClientRect().width + (parseFloat(getComputedStyle(track).gap) || 16)) * 3 : 500;
+    }
+    var prev = root.querySelector("[data-car-prev]");
+    var next = root.querySelector("[data-car-next]");
+    if (prev) prev.addEventListener("click", function () { hold(3000); track.scrollBy({ left: -step(), behavior: reduced ? "auto" : "smooth" }); });
+    if (next) next.addEventListener("click", function () { hold(3000); track.scrollBy({ left: step(), behavior: reduced ? "auto" : "smooth" }); });
+
+    /* Accumulateur flottant : scrollLeft arrondit les petits incréments,
+       on maintient donc la position exacte à part. */
+    var pos = track.scrollLeft;
+    function tick(ts) {
+      if (last === null) last = ts;
+      var dt = (ts - last) / 1000;
+      last = ts;
+      if (!paused && dt < 0.2) {
+        if (Math.abs(track.scrollLeft - pos) > 1.5) pos = track.scrollLeft; // resync après scroll manuel
+        pos += dir * 24 * dt;
+        if (setWidth > 0) {
+          if (pos >= setWidth) pos -= setWidth;
+          if (pos < 0) pos += setWidth;
+        }
+        track.scrollLeft = pos;
+      } else {
+        pos = track.scrollLeft;
+        wrap();
+      }
+      requestAnimationFrame(tick);
+    }
+    if (!reduced) {
+      requestAnimationFrame(tick);
+    } else {
+      track.addEventListener("scroll", wrap, { passive: true });
+    }
+  });
+
   /* ---- Accordion ---- */
   document.querySelectorAll("[data-acc] > .acc-item > .acc-head").forEach(function (head) {
     head.addEventListener("click", function () {

@@ -63,29 +63,39 @@ include __DIR__ . '/inc/head.php';
     </figure>
     <?php endif; ?>
 
-    <?php foreach ($levels as [$lvl, $ph, $mm]): ?>
-    <div class="sec-head" style="margin:2.5rem 0 1.5rem"><p class="eyebrow"><?= e($lvl) ?></p>
-      <h2><?= $mm ? count($mm) . ' étudiant' . (count($mm) > 1 ? 's' : '') : 'La promotion ' . e($lvl) ?></h2>
-    </div>
-    <?php if ($ph): ?>
-    <figure class="promo-figure">
-      <img src="<?= e($ph) ?>" alt="Photo du <?= e($lvl) ?>, promotion <?= e($years) ?>" loading="lazy">
-    </figure>
-    <?php endif; ?>
-    <?php if ($mm): ?>
-    <div class="trombi">
-      <?php foreach ($mm as $m): ?>
-      <figure class="trombi-card">
-        <?php if (!empty($m['photo'])): ?>
-          <span class="tphoto" style="background-image:url('<?= e($m['photo']) ?>')"></span>
-        <?php else: ?>
-          <span class="tphoto tphoto-ph"><?= e(mb_strtoupper(mb_substr((string)($m['name'] ?? '?'), 0, 1))) ?></span>
+    <?php foreach ($levels as $li => [$lvl, $ph, $mm]): ?>
+    <div class="trombi-sec"<?= $mm ? ' data-marquee data-dir="' . ($li % 2 ? '-1' : '1') . '"' : '' ?>>
+      <div class="flex-between" style="align-items:end;margin:2.5rem 0 1.5rem">
+        <div class="sec-head" style="margin:0"><p class="eyebrow"><?= e($lvl) ?></p>
+          <h2><?= $mm ? count($mm) . ' étudiant' . (count($mm) > 1 ? 's' : '') : 'La promotion ' . e($lvl) ?></h2>
+        </div>
+        <?php if ($mm): ?>
+        <div class="car-nav">
+          <button class="car-btn" data-car-prev aria-label="Faire défiler vers la gauche">←</button>
+          <button class="car-btn" data-car-next aria-label="Faire défiler vers la droite">→</button>
+        </div>
         <?php endif; ?>
-        <figcaption><?= e($m['name'] ?? '') ?></figcaption>
+      </div>
+      <?php if ($ph): ?>
+      <figure class="promo-figure">
+        <img src="<?= e($ph) ?>" alt="Photo du <?= e($lvl) ?>, promotion <?= e($years) ?>" loading="lazy">
       </figure>
-      <?php endforeach; ?>
+      <?php endif; ?>
+      <?php if ($mm): ?>
+      <div class="car-track mq-track" tabindex="0" role="group" aria-label="Trombinoscope <?= e($lvl) ?> — défilement automatique, survolez pour mettre en pause">
+        <?php foreach ($mm as $m): ?>
+        <figure class="trombi-card">
+          <?php if (!empty($m['photo'])): ?>
+            <span class="tphoto" style="background-image:url('<?= e($m['photo']) ?>')"></span>
+          <?php else: ?>
+            <span class="tphoto tphoto-ph"><?= e(mb_strtoupper(mb_substr((string)($m['name'] ?? '?'), 0, 1))) ?></span>
+          <?php endif; ?>
+          <figcaption><?= e($m['name'] ?? '') ?></figcaption>
+        </figure>
+        <?php endforeach; ?>
+      </div>
+      <?php endif; ?>
     </div>
-    <?php endif; ?>
     <?php endforeach; ?>
 
     <?php if (empty($promo['photo']) && empty($levels)): ?>
