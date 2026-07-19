@@ -43,32 +43,50 @@ avec le thème gratuit *Sydney*. Contenu riche, mais présentation datée et sur
 ```
 Pages publiques (PHP, rendues côté serveur — SEO friendly)
   index.php  le-master.php  formation.php  admissions.php
-  reseau.php  actualites.php  contact.php
+  reseau.php  actualites.php  article.php (article détaillé)  contact.php
+  404.php    sitemap.php     robots.txt
 
 inc/                 Code partagé
-  head.php           <head> + entête/nav (dédoublonné)
+  head.php           <head> + SEO (Open Graph, canonical) + entête/nav
   footer.php         pied de page
-  data.php           lecture/écriture JSON, helpers, registre des collections
+  data.php           JSON, slugs, upload d'images, helpers, collections
 
 content/             CONTENU ÉDITABLE (écrit par le back-office)
   site.json          accroche, chiffres-clés, parrain, coordonnées
-  actualites.json    articles / actualités
-  partenaires.json   cabinets & entreprises partenaires
+  actualites.json    articles (avec slug, statut publié/brouillon, image)
+  partenaires.json   cabinets & entreprises partenaires (avec logo)
   promotions.json    promotions
   temoignages.json   citations & témoignages (la 1re alimente la home)
 
 admin/               BACK-OFFICE PRIVÉ (connexion requise)
   login.php  logout.php  index.php (tableau de bord)
   collection.php       liste + réordonnancement + suppression
-  edit.php             ajout / modification d'un élément
+  edit.php             ajout / modification (+ upload d'images)
   settings.php         réglages du site (site.json)
+  password.php         changement du mot de passe
   bootstrap.php        session, authentification, CSRF, flash
   config.php           identifiants (À PERSONNALISER)
   layout.php  admin.css
 
-assets/              css/dif.css · js/dif.js · img/ (photo hero, logo, favicon)
-.htaccess            protections (index par défaut, blocage des includes)
+assets/
+  css/dif.css  js/dif.js  img/  uploads/ (images téléversées)
+logs/                messages de contact (sauvegarde, dossier protégé)
+.htaccess            index par défaut, page 404, blocage des includes
 ```
+
+## Fonctionnalités
+
+- **Articles** — chaque actualité a sa page dédiée (`article.php?slug=…`), avec image de
+  couverture, méta SEO, partage (Open Graph) et navigation précédent / suivant.
+- **Statut publié / brouillon** — un brouillon n'apparaît ni sur le site, ni dans le sitemap.
+- **Images** — upload sécurisé (JPG/PNG/WEBP/GIF, 4 Mo max, nom aléatoire) pour les couvertures
+  d'articles et les logos partenaires.
+- **Formulaire de contact fonctionnel** — validation, anti-spam (honeypot), envoi par e-mail à
+  l'association (`Reply-To` du visiteur) et sauvegarde de secours dans `logs/`.
+- **SEO** — balises Open Graph / Twitter + canonical sur chaque page, `sitemap.php` dynamique
+  (articles inclus), `robots.txt`, page **404** personnalisée.
+- **Changement de mot de passe** depuis le back-office (écrit un hash dans `admin/auth.local.php`,
+  fichier protégé et non versionné).
 
 Le contenu géré depuis `/admin` est écrit dans `content/*.json` (écriture atomique) et
 **apparaît immédiatement** sur le site public, qui lit ces fichiers à chaque affichage.
@@ -115,9 +133,16 @@ php -S localhost:8000
 
 ## Mise en production
 
-Hébergement **PHP/Apache** (comme l'actuel hébergement WordPress). Copiez les fichiers,
-assurez-vous que le dossier `content/` est **accessible en écriture** par le serveur web
-(`chmod 775 content` ou propriété du user PHP), changez le mot de passe admin, activez HTTPS.
+Hébergement **PHP/Apache** (comme l'actuel hébergement WordPress). Copiez les fichiers, puis :
+
+- rendez **accessibles en écriture** par le serveur web les dossiers `content/`, `assets/uploads/`
+  et `logs/` (`chmod 775`, ou propriété de l'utilisateur PHP) — édition du contenu, upload d'images
+  et sauvegarde des messages ;
+- pour le **changement de mot de passe** depuis l'interface, le dossier `admin/` doit être accessible
+  en écriture ; sinon, modifiez `ADMIN_PASSWORD_HASH` dans `admin/config.php` à la main ;
+- l'**envoi d'e-mails** du formulaire de contact utilise la fonction `mail()` de PHP (activée chez la
+  plupart des hébergeurs) ; les messages sont de toute façon sauvegardés dans `logs/` ;
+- **changez le mot de passe admin** et activez **HTTPS**.
 
 ## Notes & pistes
 

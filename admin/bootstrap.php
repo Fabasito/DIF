@@ -37,6 +37,23 @@ function csrf_check(): void {
     }
 }
 
+// --- Mot de passe effectif : surcharge locale (modifiable depuis l'admin) sinon config ---
+define('DIF_AUTH_OVERRIDE', __DIR__ . '/auth.local.php');
+function admin_password_hash(): string {
+    if (is_file(DIF_AUTH_OVERRIDE)) {
+        $h = include DIF_AUTH_OVERRIDE;
+        if (is_string($h) && $h !== '') return $h;
+    }
+    return ADMIN_PASSWORD_HASH;
+}
+function set_admin_password(string $plain): bool {
+    $hash = password_hash($plain, PASSWORD_DEFAULT);
+    $code = "<?php\n// Mot de passe défini depuis le back-office. Ne pas partager.\nreturn " . var_export($hash, true) . ";\n";
+    $tmp = DIF_AUTH_OVERRIDE . '.tmp' . getmypid();
+    if (file_put_contents($tmp, $code, LOCK_EX) === false) return false;
+    return rename($tmp, DIF_AUTH_OVERRIDE);
+}
+
 // --- Authentification ---
 function is_logged_in(): bool {
     if (empty($_SESSION['auth'])) return false;

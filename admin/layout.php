@@ -30,6 +30,7 @@ function admin_header(string $active = '', string $pageTitle = 'Administration')
     </nav>
     <div class="admin-side-foot">
       <a href="../index.php" target="_blank" rel="noopener">↗ Voir le site</a>
+      <a href="password.php">Mot de passe</a>
       <a href="logout.php" class="danger">Se déconnecter</a>
     </div>
   </aside>

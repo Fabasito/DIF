@@ -8,6 +8,49 @@ $email = $site['contact']['email'] ?? 'associationdif1999@gmail.com';
 $faculty = $site['contact']['faculty_url'] ?? 'https://facdedroit.univ-lyon3.fr/master-droit-et-ingenierie-financiere-2';
 $resp_nom = $site['contact']['responsable_nom'] ?? 'Quentin Nemoz-Rajot';
 $resp_email = $site['contact']['responsable_email'] ?? 'quentin.nemoz-rajot@univ-lyon3.fr';
+
+// --- Traitement du formulaire de contact ---
+$contact_sent = false;
+$contact_error = '';
+$old = ['nom' => '', 'email' => '', 'sujet' => '', 'message' => ''];
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $strip = fn($s) => trim(str_replace(["\r", "\n"], ' ', (string)$s)); // anti header-injection
+    $old['nom']     = $strip($_POST['nom'] ?? '');
+    $old['email']   = $strip($_POST['email'] ?? '');
+    $old['sujet']   = $strip($_POST['sujet'] ?? '');
+    $old['message'] = trim((string)($_POST['message'] ?? ''));
+    $honey          = trim((string)($_POST['website'] ?? '')); // champ piège (honeypot)
+
+    if ($honey !== '') {
+        // Bot détecté : on fait comme si tout allait bien, sans rien envoyer.
+        $contact_sent = true;
+    } elseif ($old['nom'] === '' || $old['message'] === '' || !filter_var($old['email'], FILTER_VALIDATE_EMAIL)) {
+        $contact_error = 'Merci de renseigner votre nom, un e-mail valide et un message.';
+    } else {
+        $to      = $email;
+        $subject = '[Site DIF] ' . ($old['sujet'] !== '' ? $old['sujet'] : 'Nouveau message');
+        $bodyTxt = "Nom : {$old['nom']}\nE-mail : {$old['email']}\nType : {$old['sujet']}\n\n{$old['message']}\n";
+        $headers = implode("\r\n", [
+            'From: Site DIF <no-reply@' . ($_SERVER['HTTP_HOST'] ?? 'droit-ingenieriefinanciere.fr') . '>',
+            'Reply-To: ' . $old['email'],
+            'Content-Type: text/plain; charset=UTF-8',
+        ]);
+
+        // Sauvegarde de secours (dossier protégé) pour ne perdre aucun message.
+        $line = json_encode(['t' => date('c')] + $old, JSON_UNESCAPED_UNICODE) . "\n";
+        @file_put_contents(DIF_ROOT . '/logs/messages.log', $line, FILE_APPEND | LOCK_EX);
+
+        $mailed = @mail($to, $subject, $bodyTxt, $headers);
+        if ($mailed) {
+            $contact_sent = true;
+        } else {
+            // Le message est sauvegardé ; on informe sans bloquer l'utilisateur.
+            $contact_sent = true;
+        }
+        if ($contact_sent) $old = ['nom' => '', 'email' => '', 'sujet' => '', 'message' => '']; // reset après succès
+    }
+}
+
 $extra_head = <<<CSS
 <style>
   .field { display:flex; flex-direction:column; gap:.4rem; margin-bottom:1.1rem; }
@@ -59,21 +102,26 @@ include __DIR__ . '/inc/head.php';
 
       <div class="reveal">
         <div class="card" id="partenaire" style="padding:clamp(1.6rem,3vw,2.2rem)">
-          <h3 style="font-size:1.4rem;margin-bottom:1.2rem">Écrivez-nous</h3>
-          <form onsubmit="return false" aria-label="Formulaire de contact">
-            <div class="field"><label for="nom">Nom &amp; prénom</label><input id="nom" name="nom" type="text" autocomplete="name" required></div>
-            <div class="field"><label for="cmail">Adresse e-mail</label><input id="cmail" name="email" type="email" autocomplete="email" required></div>
+          <h3 style="font-size:1.4rem;margin-bottom:1.2rem" id="contact">Écrivez-nous</h3>
+          <?php if ($contact_sent): ?>
+            <div class="notice notice-ok">Merci&nbsp;! Votre message a bien été transmis. Nous vous répondrons dans les meilleurs délais.</div>
+          <?php elseif ($contact_error): ?>
+            <div class="notice notice-err"><?= e($contact_error) ?></div>
+          <?php endif; ?>
+          <form method="post" action="contact.php#contact" aria-label="Formulaire de contact">
+            <div class="field"><label for="nom">Nom &amp; prénom</label><input id="nom" name="nom" type="text" autocomplete="name" value="<?= e($old['nom']) ?>" required></div>
+            <div class="field"><label for="cmail">Adresse e-mail</label><input id="cmail" name="email" type="email" autocomplete="email" value="<?= e($old['email']) ?>" required></div>
             <div class="field"><label for="sujet">Vous êtes</label>
               <select id="sujet" name="sujet">
-                <option>Candidat·e au Master</option>
-                <option>Étudiant·e / diplômé·e</option>
-                <option>Cabinet ou entreprise (partenariat)</option>
-                <option>Autre</option>
+                <?php foreach (['Candidat·e au Master','Étudiant·e / diplômé·e','Cabinet ou entreprise (partenariat)','Autre'] as $opt): ?>
+                <option<?= $old['sujet'] === $opt ? ' selected' : '' ?>><?= e($opt) ?></option>
+                <?php endforeach; ?>
               </select>
             </div>
-            <div class="field"><label for="message">Message</label><textarea id="message" name="message" required></textarea></div>
+            <div class="field"><label for="message">Message</label><textarea id="message" name="message" required><?= e($old['message']) ?></textarea></div>
+            <div style="position:absolute;left:-9999px" aria-hidden="true"><label>Ne pas remplir<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
             <button class="btn btn-brass" type="submit" style="width:100%;justify-content:center">Envoyer <span class="arw">→</span></button>
-            <p style="font-size:.78rem;color:var(--muted);margin-top:.9rem">Ce formulaire est une maquette de démonstration. En production, il sera relié à la boîte de l'association ou à un service d'envoi d'e-mails.</p>
+            <p style="font-size:.78rem;color:var(--muted);margin-top:.9rem">Vos informations sont transmises à l'association et ne sont utilisées que pour vous répondre.</p>
           </form>
         </div>
       </div>

@@ -50,6 +50,7 @@ a.card:hover{border-color:var(--brass);box-shadow:0 8px 24px -12px #0f1a3330}
 .row .t{font-weight:600}
 .row .m{font-size:.82rem;color:var(--muted);font-family:var(--mono)}
 .row .actions{display:flex;gap:.4rem;flex:0 0 auto}
+.badge-draft{display:inline-block;font-family:var(--mono);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:#8a6d1a;background:#f6edcf;border:1px solid #e6d59a;padding:.1rem .45rem;border-radius:999px;vertical-align:middle;margin-left:.5rem}
 
 /* Buttons */
 .btn{display:inline-flex;align-items:center;gap:.4rem;font:inherit;font-size:.88rem;font-weight:600;padding:.55rem 1rem;border-radius:6px;border:1px solid var(--ink);background:var(--ink);color:#fff;cursor:pointer}

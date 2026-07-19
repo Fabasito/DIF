@@ -1,5 +1,8 @@
 DirectoryIndex index.php index.html
 
+# Page d'erreur personnalisée
+ErrorDocument 404 /404.php
+
 # Empêche l'accès web direct aux includes PHP
 <IfModule mod_authz_core.c>
   <FilesMatch "\.(tmp)$">

@@ -13,6 +13,10 @@ $nav = [
     'contact'     => 'Contact',
 ];
 $extra_head = $extra_head ?? '';
+$base = site_base_url();
+$canonical = $canonical ?? ($base . '/' . ltrim($_SERVER['REQUEST_URI'] ?? '', '/'));
+$og_image  = $og_image  ?? ($base . '/assets/img/lyon-palais-nuit.jpg');
+$og_type   = $og_type   ?? 'website';
 ?><!doctype html>
 <html lang="fr">
 <head>
@@ -20,6 +24,17 @@ $extra_head = $extra_head ?? '';
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title><?= e($title) ?></title>
 <meta name="description" content="<?= e($desc) ?>">
+<link rel="canonical" href="<?= e($canonical) ?>">
+<meta property="og:type" content="<?= e($og_type) ?>">
+<meta property="og:title" content="<?= e($title) ?>">
+<meta property="og:description" content="<?= e($desc) ?>">
+<meta property="og:image" content="<?= e($og_image) ?>">
+<meta property="og:url" content="<?= e($canonical) ?>">
+<meta property="og:locale" content="fr_FR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="<?= e($title) ?>">
+<meta name="twitter:description" content="<?= e($desc) ?>">
+<meta name="twitter:image" content="<?= e($og_image) ?>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..500&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">

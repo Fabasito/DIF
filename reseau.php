@@ -36,6 +36,7 @@ include __DIR__ . '/inc/head.php';
     <div class="grid cols-2">
       <?php foreach ($partners as $i => $p): ?>
       <article class="partner-card reveal"<?= ($i % 2) ? ' data-d="1"' : '' ?>>
+        <?php if (!empty($p['logo'])): ?><img class="plogo-card" src="<?= e($p['logo']) ?>" alt="<?= e($p['name'] ?? '') ?>"><?php endif; ?>
         <div class="nm"><?= e($p['name'] ?? '') ?></div>
         <?php if (!empty($p['tags'])): ?><div class="meta"><?= e($p['tags']) ?></div><?php endif; ?>
         <p><?= e($p['description'] ?? '') ?></p>

@@ -14,23 +14,59 @@ $i      = isset($_GET['i']) ? (int)$_GET['i'] : null;
 $isEdit = $i !== null && isset($items[$i]);
 $item   = $isEdit ? $items[$i] : [];
 
+$hasImage = false;
+foreach ($fields as $meta) { if ($meta[1] === 'image') { $hasImage = true; break; } }
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     csrf_check();
     $new = $isEdit ? $items[$i] : [];
+    $imgWarning = '';
+
     foreach ($fields as $name => $meta) {
-        $val = trim((string)($_POST[$name] ?? ''));
-        // Les valeurs sont stockées en texte brut ; l'échappement se fait à l'affichage.
-        $new[$name] = $val;
+        $ftype = $meta[1];
+        if ($ftype === 'image') {
+            if (!empty($_POST['remove_' . $name])) {
+                $new[$name] = '';
+            } else {
+                $up = handle_upload($name);
+                if (!empty($up['ok'])) {
+                    $new[$name] = $up['path'];
+                } elseif (empty($up['empty'])) {
+                    $imgWarning = $up['error'] ?? 'Image non enregistrée.';
+                }
+            }
+        } else {
+            $new[$name] = trim((string)($_POST[$name] ?? ''));
+        }
     }
+
+    // Slug stable pour les articles : généré à la création, conservé ensuite.
+    if (isset($def['title'])) {
+        if (empty($new['slug'])) {
+            $base = slugify((string)($new[$def['title']] ?? ''));
+            $slug = $base; $n = 2;
+            $exists = function ($s) use ($items, $i) {
+                foreach ($items as $k => $it) {
+                    if ($k === $i) continue;
+                    if (($it['slug'] ?? '') === $s) return true;
+                }
+                return false;
+            };
+            while ($exists($slug)) { $slug = $base . '-' . $n++; }
+            $new['slug'] = $slug;
+        }
+    }
+
     if ($isEdit) {
         $items[$i] = $new;
     } else {
-        // Nouveaux articles : ajoutés en tête ; autres collections : en fin de liste.
         if ($type === 'actualites') array_unshift($items, $new);
         else $items[] = $new;
     }
+
     if (save_json($type, $items)) {
         flash($isEdit ? 'Modifications enregistrées.' : 'Élément ajouté.');
+        if ($imgWarning) flash($imgWarning, 'err');
     } else {
         flash('Erreur lors de l\'enregistrement (droits d\'écriture ?).', 'err');
     }
@@ -47,14 +83,25 @@ admin_header($type, ($isEdit ? 'Modifier' : 'Ajouter') . ' — ' . $def['label']
   </div>
 </div>
 
-<form class="stack" method="post" action="edit.php?type=<?= e($type) ?><?= $isEdit ? '&i='.$i : '' ?>">
+<form class="stack" method="post" action="edit.php?type=<?= e($type) ?><?= $isEdit ? '&i='.$i : '' ?>"<?= $hasImage ? ' enctype="multipart/form-data"' : '' ?>>
   <?= csrf_field() ?>
   <?php foreach ($fields as $name => $meta):
         [$label, $ftype] = [$meta[0], $meta[1]];
         $val = $item[$name] ?? ($ftype === 'date' ? date('Y-m-d') : ''); ?>
   <div class="field">
     <label for="f-<?= e($name) ?>"><?= e($label) ?></label>
-    <?php if ($ftype === 'textarea'): ?>
+    <?php if ($ftype === 'image'): ?>
+      <?php if (!empty($val)): ?>
+        <div style="display:flex;align-items:center;gap:1rem;margin-bottom:.4rem">
+          <img src="../<?= e($val) ?>" alt="" style="height:64px;width:auto;border:1px solid var(--line);border-radius:6px;background:#fff;padding:4px">
+          <label style="display:flex;align-items:center;gap:.4rem;font-family:inherit;text-transform:none;letter-spacing:0;color:var(--danger)">
+            <input type="checkbox" name="remove_<?= e($name) ?>" value="1" style="width:auto"> Supprimer l'image
+          </label>
+        </div>
+      <?php endif; ?>
+      <input id="f-<?= e($name) ?>" name="<?= e($name) ?>" type="file" accept="image/jpeg,image/png,image/webp,image/gif">
+      <span class="hint">JPG, PNG, WEBP ou GIF — 4 Mo maximum.</span>
+    <?php elseif ($ftype === 'textarea'): ?>
       <textarea id="f-<?= e($name) ?>" name="<?= e($name) ?>"><?= e($val) ?></textarea>
     <?php elseif ($ftype === 'select'):
         $opts = $meta[2] ?? []; ?>

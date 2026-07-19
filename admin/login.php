@@ -7,7 +7,7 @@ $error = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     csrf_check();
     $pw = (string)($_POST['password'] ?? '');
-    if (password_verify($pw, ADMIN_PASSWORD_HASH)) {
+    if (password_verify($pw, admin_password_hash())) {
         login_success();
         header('Location: index.php');
         exit;

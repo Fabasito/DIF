@@ -1,0 +1,3 @@
+# Images téléversées via le back-office. Contenu ignoré par défaut.
+*
+!.gitignore

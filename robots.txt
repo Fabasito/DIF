@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /inc/
+Disallow: /logs/
+
+Sitemap: https://droit-ingenieriefinanciere.fr/sitemap.php

@@ -1,4 +1,4 @@
-<FilesMatch "^(config|bootstrap|layout)\.php$">
+<FilesMatch "^(config|bootstrap|layout|auth\.local)\.php$">
   <IfModule mod_authz_core.c>
     Require all denied
   </IfModule>

@@ -49,7 +49,7 @@ admin_header($type, $def['label']);
   <?php foreach ($items as $i => $it): ?>
   <div class="row">
     <div class="grow">
-      <div class="t"><?= e($it[$titleField] ?? '(sans titre)') ?></div>
+      <div class="t"><?= e($it[$titleField] ?? '(sans titre)') ?><?php if ($type === 'actualites' && ($it['published'] ?? '') === 'Brouillon'): ?> <span class="badge-draft">Brouillon</span><?php endif; ?></div>
       <?php if ($type === 'actualites'): ?>
         <div class="m"><?= e(fr_date($it['date'] ?? '')) ?> · <?= e($it['category'] ?? '') ?></div>
       <?php elseif (!empty($it['tags'])): ?>

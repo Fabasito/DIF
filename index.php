@@ -11,6 +11,7 @@ $actus   = load_json('actualites', []);
 $partners= load_json('partenaires', []);
 $temoins = load_json('temoignages', []);
 
+$actus   = array_values(array_filter($actus, 'is_published'));
 usort($actus, fn($a, $b) => strcmp($b['date'] ?? '', $a['date'] ?? ''));
 $latest  = array_slice($actus, 0, 3);
 $logos   = array_slice($partners, 0, 8);
@@ -189,7 +190,13 @@ include __DIR__ . '/inc/head.php';
     </div>
     <div class="logo-grid reveal">
       <?php foreach ($logos as $p): ?>
-      <div class="cell"><div><div class="nm"><?= e($p['name'] ?? '') ?></div><div class="ct"><?= e($p['tags'] ?? '') ?></div></div></div>
+      <div class="cell">
+        <?php if (!empty($p['logo'])): ?>
+          <img class="plogo" src="<?= e($p['logo']) ?>" alt="<?= e($p['name'] ?? '') ?>">
+        <?php else: ?>
+          <div><div class="nm"><?= e($p['name'] ?? '') ?></div><div class="ct"><?= e($p['tags'] ?? '') ?></div></div>
+        <?php endif; ?>
+      </div>
       <?php endforeach; ?>
     </div>
     <div class="center mt-4"><a class="link-arrow" href="reseau.php">Tous nos partenaires →</a></div>
@@ -221,7 +228,8 @@ include __DIR__ . '/inc/head.php';
     </div>
     <div class="grid cols-3">
       <?php foreach ($latest as $i => $n): ?>
-      <a class="news-card reveal"<?= $i ? ' data-d="'.$i.'"' : '' ?> href="actualites.php">
+      <a class="news-card reveal<?= !empty($n['image']) ? ' has-img' : '' ?>"<?= $i ? ' data-d="'.$i.'"' : '' ?> href="article.php?slug=<?= e(rawurlencode(article_slug($n))) ?>">
+        <?php if (!empty($n['image'])): ?><span class="thumb" style="background-image:url('<?= e($n['image']) ?>')"></span><?php endif; ?>
         <div class="flex-between"><span class="cat"><?= e($n['category'] ?? '') ?></span><span class="date"><?= e(fr_date($n['date'] ?? '')) ?></span></div>
         <h3><?= e($n['title'] ?? '') ?></h3>
         <p><?= e($n['excerpt'] ?? '') ?></p>

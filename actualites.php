@@ -5,6 +5,7 @@ $desc  = 'Conférences, mises en situation professionnelle, partenariats et vie 
 $active = 'actualites';
 
 $actus = load_json('actualites', []);
+$actus = array_values(array_filter($actus, 'is_published'));
 usort($actus, fn($a, $b) => strcmp($b['date'] ?? '', $a['date'] ?? ''));
 $cats = [];
 foreach ($actus as $a) { if (!empty($a['category'])) $cats[$a['category']] = true; }
@@ -34,7 +35,8 @@ include __DIR__ . '/inc/head.php';
 
     <div class="grid cols-3" id="news-grid">
       <?php foreach ($actus as $i => $n): ?>
-      <a class="news-card reveal"<?= ($i % 3) ? ' data-d="'.($i % 3).'"' : '' ?> href="actualites.php" data-cat="<?= e($n['category'] ?? '') ?>">
+      <a class="news-card reveal<?= !empty($n['image']) ? ' has-img' : '' ?>"<?= ($i % 3) ? ' data-d="'.($i % 3).'"' : '' ?> href="article.php?slug=<?= e(rawurlencode(article_slug($n))) ?>" data-cat="<?= e($n['category'] ?? '') ?>">
+        <?php if (!empty($n['image'])): ?><span class="thumb" style="background-image:url('<?= e($n['image']) ?>')"></span><?php endif; ?>
         <div class="flex-between"><span class="cat"><?= e($n['category'] ?? '') ?></span><span class="date"><?= e(fr_date($n['date'] ?? '')) ?></span></div>
         <h3><?= e($n['title'] ?? '') ?></h3>
         <p><?= e($n['excerpt'] ?? '') ?></p>

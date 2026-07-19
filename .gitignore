@@ -2,3 +2,6 @@
 content/*.tmp*
 # Logs
 *.log
+
+# Mot de passe admin défini via le back-office
+admin/auth.local.php
