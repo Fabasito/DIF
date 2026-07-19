@@ -53,27 +53,19 @@ include __DIR__ . '/inc/head.php';
 
 <!-- PROMOTIONS -->
 <section class="section" id="promotions">
-  <div class="container">
-    <div class="split">
-      <div>
+  <div class="container" data-carousel>
+    <div class="flex-between sec-head" style="max-width:none;margin-bottom:2.2rem;align-items:end">
+      <div style="max-width:640px">
         <p class="eyebrow">Les promotions</p>
         <h2>Une grande famille, promotion après promotion.</h2>
-        <p>Chaque année, une nouvelle promotion de Master 1 et de Master 2 rejoint le Master DIF. Les trombinoscopes retracent l'histoire de cette communauté depuis plus de deux décennies.</p>
-        <a class="link-arrow mt-2" href="actualites.php">Suivre la vie des promotions →</a>
+        <p style="margin-bottom:0">De 2011 à aujourd'hui, chaque promotion écrit une page de l'histoire du Master. Les trombinoscopes retracent celle de cette communauté, année après année.</p>
       </div>
-      <div class="reveal">
-        <?php foreach ($promos as $p): $yrs = $p['years'] ?? ''; $has = ($mcounts[$yrs] ?? 0) > 0; ?>
-        <div class="promo-row">
-          <span class="yr"><?= e($yrs) ?></span>
-          <?php if ($has): ?>
-            <a class="lv" href="promotion.php?slug=<?= e(rawurlencode(slugify($yrs))) ?>" style="color:var(--brass)">Trombinoscope →</a>
-          <?php else: ?>
-            <span class="lv"><?= e($p['levels'] ?? '') ?></span>
-          <?php endif; ?>
-        </div>
-        <?php endforeach; ?>
+      <div class="car-nav">
+        <button class="car-btn" data-car-prev aria-label="Promotions précédentes">←</button>
+        <button class="car-btn" data-car-next aria-label="Promotions suivantes">→</button>
       </div>
     </div>
+    <?php include __DIR__ . '/inc/promo-carousel.php'; ?>
   </div>
 </section>
 

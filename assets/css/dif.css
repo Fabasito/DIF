@@ -371,6 +371,49 @@ body.nav-open .mobile-nav { transform: translateX(0); }
 .article-body { font-size: 1.08rem; line-height: 1.75; }
 .article-body p { margin: 0 0 1.35rem; color: var(--text); max-width: 68ch; }
 
+/* ---------- Carousel (promotions) --------------------------- */
+.car-nav { display: flex; gap: .55rem; }
+.car-btn {
+  width: 44px; height: 44px; border-radius: 50%;
+  border: 1px solid var(--line); background: var(--surface); color: var(--text);
+  display: grid; place-items: center; font-family: var(--mono); font-size: 1rem;
+  transition: border-color .2s ease, color .2s ease, transform .2s ease, opacity .2s ease;
+}
+.car-btn:hover:not(:disabled) { border-color: var(--brass); color: var(--brass); transform: translateY(-2px); }
+.car-btn:disabled { opacity: .3; cursor: default; }
+
+.car-track {
+  display: flex; gap: clamp(.9rem, 1.6vw, 1.3rem);
+  overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth;
+  padding: 6px 6px 1.1rem; margin: -6px;
+  scrollbar-width: none;
+}
+.car-track::-webkit-scrollbar { display: none; }
+.car-track:focus-visible { outline: 2px solid var(--brass); outline-offset: 4px; border-radius: 4px; }
+.car-track > * { flex: 0 0 clamp(225px, 23vw, 285px); scroll-snap-align: start; }
+@media (prefers-reduced-motion: reduce) { .car-track { scroll-behavior: auto; } }
+
+.car-progress { position: relative; height: 2px; background: var(--line); border-radius: 2px; margin-top: .9rem; overflow: hidden; }
+.car-progress i { position: absolute; top: 0; left: 0; height: 100%; width: 30%; background: var(--brass); border-radius: 2px; }
+
+/* Carte promotion */
+.promo-card {
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 1.5rem 1.5rem 1.35rem; min-height: 188px;
+  display: flex; flex-direction: column;
+  transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+}
+.promo-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); border-color: color-mix(in srgb, var(--brass) 45%, var(--line)); }
+.promo-card .p-eyebrow { font-family: var(--mono); font-size: .66rem; letter-spacing: .18em; text-transform: uppercase; color: var(--brass); }
+.promo-card .p-years { font-family: var(--mono); font-variant-numeric: tabular-nums; letter-spacing: -.03em; font-size: clamp(1.35rem, 1.8vw, 1.6rem); color: var(--text); margin: .85rem 0 .15rem; white-space: nowrap; }
+.promo-card .p-levels { font-size: .88rem; color: var(--muted); }
+.promo-card .p-link { margin-top: auto; padding-top: 1rem; font-family: var(--mono); font-size: .78rem; letter-spacing: .04em; color: var(--brass); display: inline-flex; gap: .45rem; transition: gap .2s ease; }
+.promo-card .p-link:hover { gap: .8rem; }
+.promo-card.is-current { background: var(--ink); border-color: var(--ink); }
+.promo-card.is-current .p-years { color: #fff; }
+.promo-card.is-current .p-levels { color: var(--on-ink-mut); }
+.promo-card.is-current:hover { border-color: var(--brass); }
+
 /* Trombinoscope */
 .trombi { display: grid; grid-template-columns: repeat(5, 1fr); gap: clamp(1rem, 2vw, 1.6rem); margin-bottom: 3rem; }
 @media (max-width: 900px) { .trombi { grid-template-columns: repeat(3, 1fr); } }

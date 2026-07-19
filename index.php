@@ -14,6 +14,8 @@ $temoins = load_json('temoignages', []);
 $actus   = array_values(array_filter($actus, 'is_published'));
 usort($actus, fn($a, $b) => strcmp($b['date'] ?? '', $a['date'] ?? ''));
 $latest  = array_slice($actus, 0, 3);
+$promos  = load_json('promotions', []);
+$mcounts = members_count_by_promotion();
 $logos   = array_slice($partners, 0, 8);
 $quote   = $temoins[0] ?? null;
 
@@ -49,8 +51,8 @@ include __DIR__ . '/inc/head.php';
     <div class="split">
       <div>
         <p class="eyebrow">La double compétence</p>
-        <h2>Comprendre l'entreprise dans toutes ses dimensions.</h2>
-        <p class="lead">Rares sont les profils capables de saisir à la fois l'enjeu juridique et l'enjeu financier d'une opération. Le Master DIF les forme — pour auditer, construire et sécuriser des montages adaptés aux réalités du droit comme de la gestion.</p>
+        <h2>Lire une opération sous ses deux angles.</h2>
+        <p class="lead">Le droit qui structure, la finance qui décide : rares sont les profils capables de tenir les deux à la fois. Le Master DIF forme ces juristes-financiers — pour auditer, construire et sécuriser les montages les plus exigeants, en France comme à l'international.</p>
       </div>
       <div class="duo reveal">
         <div>
@@ -73,7 +75,8 @@ include __DIR__ . '/inc/head.php';
   <div class="container">
     <div class="sec-head">
       <p class="eyebrow">Pourquoi le DIF</p>
-      <h2>Quatre piliers d'une réussite reconnue.</h2>
+      <h2>Quatre piliers, une même exigence.</h2>
+      <p>Ce qui distingue le Master depuis sa création, et ce que chaque promotion vient consolider.</p>
     </div>
     <div class="grid cols-4">
       <article class="card reveal">
@@ -115,7 +118,7 @@ include __DIR__ . '/inc/head.php';
       <div>
         <p class="eyebrow">La formation</p>
         <h2>Deux années pour bâtir un profil rare.</h2>
-        <p>Accessible sur sélection après une licence en droit ou en gestion, le cursus articule des bases théoriques solides, une spécialisation technique et une professionnalisation exigeante.</p>
+        <p>Sur sélection après une licence en droit ou en gestion, le cursus bâtit d'abord un socle théorique solide, puis une spécialisation technique de haut niveau — jusqu'à l'immersion professionnelle en cabinet, en entreprise ou en institution.</p>
         <ul class="flist">
           <li><span class="n">M1</span><div><h3>Fondations</h3><p>Analyse financière, fiscalité, comptabilité, droit des sûretés, financement des entreprises. Stage de 3 mois minimum et mémoire.</p></div></li>
           <li><span class="n">M2</span><div><h3>Spécialisation</h3><p>Ingénierie financière, groupes de sociétés, contentieux des affaires, droit boursier, RSE, crypto-actifs. Stage de 3 à 6 mois et mémoire.</p></div></li>
@@ -132,7 +135,7 @@ include __DIR__ . '/inc/head.php';
     <div class="sec-head center">
       <p class="eyebrow center on-ink">La professionnalisation</p>
       <h2>Opérationnels avant même le diplôme.</h2>
-      <p>Des stages « longue durée » obligatoires en cabinet, en entreprise ou en institution, complétés tout au long de l'année par des mises en situation professionnelle et des conférences d'actualité.</p>
+      <p>Des stages « longue durée » obligatoires dès le Master 1, rythmés toute l'année par des mises en situation professionnelle chez nos partenaires et un cycle de conférences d'actualité animé par des praticiens.</p>
     </div>
     <div class="grid cols-3">
       <div class="reveal center">
@@ -157,8 +160,8 @@ include __DIR__ . '/inc/head.php';
     <div class="split">
       <div>
         <p class="eyebrow">Les débouchés</p>
-        <h2>Une diversité de carrières, un même socle d'excellence.</h2>
-        <p>La transversalité du diplôme ouvre les portes des cabinets, des banques, de l'audit-conseil et des directions juridiques et financières. Toute entreprise confrontée à des choix financiers complexes recherche ce juriste-financier capable de concilier options financières, stratégie juridique et fiscalité.</p>
+        <h2>Un socle, douze métiers.</h2>
+        <p>Cabinets d'affaires, banques, audit-conseil, directions juridiques et financières : partout où des choix financiers complexes rencontrent leur environnement juridique, on recherche ce profil capable de concilier options financières, stratégie juridique et fiscalité.</p>
         <a class="link-arrow mt-2" href="formation.php#debouches">Explorer les débouchés →</a>
       </div>
       <div class="reveal">
@@ -215,6 +218,25 @@ include __DIR__ . '/inc/head.php';
   </div>
 </section>
 <?php endif; ?>
+
+<!-- PROMOTIONS -->
+<section class="section alt">
+  <div class="container" data-carousel>
+    <div class="flex-between sec-head" style="max-width:none;margin-bottom:2.2rem;align-items:end">
+      <div style="max-width:640px">
+        <p class="eyebrow">Depuis 1999</p>
+        <h2>Une maison, vingt-cinq promotions.</h2>
+        <p style="margin-bottom:0">Chaque année, une vingtaine d'étudiants rejoint la famille DIF. D'une promotion à l'autre, le même esprit : la curiosité, l'exigence, l'entraide.</p>
+      </div>
+      <div class="car-nav">
+        <button class="car-btn" data-car-prev aria-label="Promotions précédentes">←</button>
+        <button class="car-btn" data-car-next aria-label="Promotions suivantes">→</button>
+      </div>
+    </div>
+    <?php include __DIR__ . '/inc/promo-carousel.php'; ?>
+    <div class="mt-3"><a class="link-arrow" href="reseau.php#promotions">Le réseau &amp; les trombinoscopes →</a></div>
+  </div>
+</section>
 
 <!-- ACTUALITES -->
 <section class="section">

@@ -16,16 +16,22 @@ include __DIR__ . '/inc/head.php';
 
 <section class="section">
   <div class="container">
-    <div class="split">
-      <div>
-        <p class="eyebrow">Objectifs</p>
-        <h2>Une vision complète de l'entreprise.</h2>
-        <p>Former des spécialistes capables de maîtriser l'ingénierie juridique et financière, et sensibiliser à la transversalité des disciplines — juridiques, fiscales, comptables et financières — pour appréhender l'entreprise dans son ensemble.</p>
-      </div>
+    <div class="sec-head">
+      <p class="eyebrow">Objectifs &amp; atouts</p>
+      <h2>Une vision complète de l'entreprise.</h2>
+      <p>Former des spécialistes de haut niveau en droit et finance d'entreprise, capables de maîtriser l'ingénierie juridique et financière dans ses dimensions française et internationale — et sensibilisés à la transversalité des disciplines juridiques, fiscales, comptables et financières.</p>
+    </div>
+    <div class="grid cols-2" style="gap:0 3rem;align-items:start">
       <ul class="flist reveal">
-        <li><span class="n">◆</span><div><h3>Double qualification</h3><p>Droit des affaires et finance d'entreprise, reconnue par les professionnels et les recruteurs.</p></div></li>
-        <li><span class="n">◆</span><div><h3>Encadrement privilégié</h3><p>Une vingtaine d'étudiants par promotion, dès le Master 1.</p></div></li>
-        <li><span class="n">◆</span><div><h3>Diplôme classé</h3><p>Régulièrement distingué en « Droit des affaires & Management » (SMBG) et « Business & Commercial Law » (Eduniversal).</p></div></li>
+        <li><span class="n">01</span><div><h3>Double qualification</h3><p>Droit des affaires et finance d'entreprise, reconnue par les professionnels et les recruteurs.</p></div></li>
+        <li><span class="n">02</span><div><h3>Véritable professionnalisation</h3><p>3 mois de stage minimum en Master 1, 3 à 6 mois en Master 2, en entreprise, cabinet d'avocats ou institution — pour former des acteurs immédiatement opérationnels.</p></div></li>
+        <li><span class="n">03</span><div><h3>Corps professoral d'excellence</h3><p>Universitaires en droit et en gestion du plus haut niveau académique, et praticiens renommés : avocats d'affaires, consultants, directeurs de banques, directeurs juridiques, dirigeants, magistrats, spécialistes en communication juridique et financière.</p></div></li>
+        <li><span class="n">04</span><div><h3>Sélection &amp; encadrement</h3><p>Une sélection à l'entrée menant à un encadrement privilégié et optimal, avec une vingtaine d'étudiants par promotion dès le Master 1.</p></div></li>
+      </ul>
+      <ul class="flist reveal" data-d="1">
+        <li><span class="n">05</span><div><h3>Formation pionnière</h3><p>Innovante et adaptée, elle débouche sur une grande diversité de carrières : avocat, auditeur financier, expert-comptable, consultant en finance ou en fiscalité…</p></div></li>
+        <li><span class="n">06</span><div><h3>Un réseau mondial</h3><p>Plus de 400 diplômés implantés dans les meilleurs cabinets et entreprises, dans le monde entier.</p></div></li>
+        <li><span class="n">07</span><div><h3>Diplôme classé</h3><p>Depuis plusieurs années parmi les meilleurs programmes français en « Droit des affaires &amp; Management » (SMBG) et bien positionné en « Business &amp; Commercial Law » en Europe de l'Ouest (Eduniversal).</p></div></li>
       </ul>
     </div>
   </div>
