@@ -130,7 +130,7 @@
     update();
   });
 
-  /* ---- Marquee infini (trombinoscopes) ---- */
+  /* ---- Marquee infini (trombinoscopes) : mouvement constant, jamais à l'arrêt ---- */
   document.querySelectorAll("[data-marquee]").forEach(function (root) {
     var track = root.querySelector(".mq-track");
     if (!track || track.children.length === 0) return;
@@ -156,48 +156,64 @@
     function wrap() {
       if (setWidth <= 0) return;
       if (track.scrollLeft >= setWidth) track.scrollLeft -= setWidth;
-      else if (track.scrollLeft <= 0 && dir < 0) track.scrollLeft += setWidth;
       else if (track.scrollLeft < 0) track.scrollLeft += setWidth;
     }
 
-    var paused = false, idleTimer = null, last = null;
-    function hold(ms) {
-      paused = true;
-      clearTimeout(idleTimer);
-      idleTimer = setTimeout(function () { paused = false; }, ms || 2500);
-    }
-    root.addEventListener("pointerenter", function () { paused = true; clearTimeout(idleTimer); });
-    root.addEventListener("pointerleave", function () { paused = false; });
-    root.addEventListener("focusin", function () { paused = true; });
-    root.addEventListener("focusout", function () { paused = false; });
-    track.addEventListener("wheel", function () { hold(2500); }, { passive: true });
-    track.addEventListener("touchstart", function () { hold(3000); }, { passive: true });
-
+    /* Flèches : « coup de pouce » amorti, intégré au mouvement continu. */
+    var pending = 0;
     function step() {
       var c = track.firstElementChild;
       return c ? (c.getBoundingClientRect().width + (parseFloat(getComputedStyle(track).gap) || 16)) * 3 : 500;
     }
     var prev = root.querySelector("[data-car-prev]");
     var next = root.querySelector("[data-car-next]");
-    if (prev) prev.addEventListener("click", function () { hold(3000); track.scrollBy({ left: -step(), behavior: reduced ? "auto" : "smooth" }); });
-    if (next) next.addEventListener("click", function () { hold(3000); track.scrollBy({ left: step(), behavior: reduced ? "auto" : "smooth" }); });
+    if (prev) prev.addEventListener("click", function () {
+      if (reduced) { track.scrollLeft -= step(); wrap(); } else pending -= step();
+    });
+    if (next) next.addEventListener("click", function () {
+      if (reduced) { track.scrollLeft += step(); wrap(); } else pending += step();
+    });
 
-    /* Accumulateur flottant : scrollLeft arrondit les petits incréments,
-       on maintient donc la position exacte à part. */
-    var pos = track.scrollLeft;
+    /* Glisser à la souris (le tactile défile nativement). */
+    var dragging = false, dragId = null, dragX = 0, dragSL = 0;
+    track.addEventListener("pointerdown", function (e) {
+      if (e.pointerType !== "mouse" || e.button !== 0) return;
+      dragging = true; dragId = e.pointerId; dragX = e.clientX; dragSL = track.scrollLeft;
+      track.setPointerCapture(e.pointerId);
+    });
+    track.addEventListener("pointermove", function (e) {
+      if (!dragging || e.pointerId !== dragId) return;
+      track.scrollLeft = dragSL - (e.clientX - dragX);
+    });
+    function endDrag(e) {
+      if (!dragging || (e.pointerId !== undefined && e.pointerId !== dragId)) return;
+      dragging = false; dragId = null;
+    }
+    track.addEventListener("pointerup", endDrag);
+    track.addEventListener("pointercancel", endDrag);
+    var touching = false;
+    track.addEventListener("touchstart", function () { touching = true; }, { passive: true });
+    track.addEventListener("touchend", function () { touching = false; }, { passive: true });
+    track.addEventListener("touchcancel", function () { touching = false; }, { passive: true });
+
+    /* Accumulateur flottant : scrollLeft arrondit les incréments < 1 px. */
+    var pos = track.scrollLeft, last = null;
     function tick(ts) {
       if (last === null) last = ts;
       var dt = (ts - last) / 1000;
       last = ts;
-      if (!paused && dt < 0.2) {
-        if (Math.abs(track.scrollLeft - pos) > 1.5) pos = track.scrollLeft; // resync après scroll manuel
-        pos += dir * 24 * dt;
+      if (dt < 0.2 && !dragging && !touching) {
+        if (Math.abs(track.scrollLeft - pos) > 1.5) pos = track.scrollLeft; // resync après molette/défilement manuel
+        var take = pending * Math.min(1, dt * 7);
+        if (Math.abs(pending - take) < 0.5) { take = pending; }
+        pending -= take;
+        pos += dir * 24 * dt + take;
         if (setWidth > 0) {
-          if (pos >= setWidth) pos -= setWidth;
-          if (pos < 0) pos += setWidth;
+          while (pos >= setWidth) pos -= setWidth;
+          while (pos < 0) pos += setWidth;
         }
         track.scrollLeft = pos;
-      } else {
+      } else if (dragging || touching) {
         pos = track.scrollLeft;
         wrap();
       }

@@ -433,6 +433,22 @@ body.nav-open .mobile-nav { transform: translateX(0); }
 .mq-track:active { cursor: grabbing; }
 .mq-track > * { flex: 0 0 clamp(148px, 15vw, 185px); scroll-snap-align: none; }
 .trombi-sec { margin-bottom: 1.5rem; }
+.mq-wrap { position: relative; }
+.mq-arrow {
+  position: absolute; top: 50%; transform: translateY(-50%); z-index: 5;
+  width: 46px; height: 46px; border-radius: 50%;
+  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--surface) 90%, transparent);
+  backdrop-filter: blur(8px);
+  color: var(--text); font-family: var(--mono); font-size: 1.05rem;
+  display: grid; place-items: center;
+  box-shadow: var(--shadow-md);
+  transition: border-color .2s ease, color .2s ease, transform .2s ease;
+}
+.mq-arrow:hover { border-color: var(--brass); color: var(--brass); transform: translateY(-50%) scale(1.06); }
+.mq-arrow.prev { left: -10px; }
+.mq-arrow.next { right: -10px; }
+@media (max-width: 640px) { .mq-arrow { width: 40px; height: 40px; } .mq-arrow.prev { left: -4px; } .mq-arrow.next { right: -4px; } }
 
 /* Trombinoscope */
 .trombi { display: grid; grid-template-columns: repeat(5, 1fr); gap: clamp(1rem, 2vw, 1.6rem); margin-bottom: 3rem; }
