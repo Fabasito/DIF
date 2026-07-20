@@ -143,6 +143,9 @@ php -S localhost:8000
 
 ## Mise en production
 
+> **Guide pas à pas complet : [DEPLOIEMENT.md](DEPLOIEMENT.md)** (sauvegarde de l'ancien
+> site, transfert, droits, mot de passe, HTTPS, bascule, liste de contrôle, SEO).
+
 Hébergement **PHP/Apache** (comme l'actuel hébergement WordPress). Copiez les fichiers, puis :
 
 - rendez **accessibles en écriture** par le serveur web les dossiers `content/`, `assets/uploads/`
