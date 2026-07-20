@@ -1,0 +1,23 @@
+# Render Blueprint (optionnel) — déploiement en un clic.
+#   render.com → New + → Blueprint → sélectionner ce dépôt.
+#
+# Offre GRATUITE (ci-dessous) : le site et l'admin fonctionnent ; les modifications
+# faites depuis l'admin sont conservées le temps de la session mais réinitialisées à
+# chaque redéploiement (le disque du plan gratuit est éphémère).
+#
+# Pour CONSERVER durablement les modifications : passer le service en offre payante,
+# décommenter le bloc `disk` et la variable `DIF_DATA_DIR` ci-dessous (voir HEBERGEMENT.md).
+services:
+  - type: web
+    name: master-dif
+    runtime: docker
+    plan: free
+    region: frankfurt
+    dockerfilePath: ./Dockerfile
+    # envVars:
+    #   - key: DIF_DATA_DIR
+    #     value: /data
+    # disk:
+    #   name: dif-data
+    #   mountPath: /data
+    #   sizeGB: 1

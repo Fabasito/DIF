@@ -14,9 +14,9 @@ COPY . /var/www/html/
 RUN chmod -R 775 /var/www/html/content /var/www/html/logs /var/www/html/assets/uploads 2>/dev/null || true \
  && chown -R www-data:www-data /var/www/html 2>/dev/null || true
 
-# Respecter le port imposé par la plateforme (Render/Railway) sinon 80
-RUN printf '#!/bin/sh\nP="${PORT:-80}"\nsed -ri "s/^Listen .*/Listen ${P}/" /etc/apache2/ports.conf\nsed -ri "s/:80>/:${P}>/" /etc/apache2/sites-enabled/000-default.conf\nexec apache2-foreground\n' > /usr/local/bin/start.sh \
- && chmod +x /usr/local/bin/start.sh
+# Script de démarrage : port dynamique + disque persistant inscriptible par Apache
+COPY docker-start.sh /usr/local/bin/start.sh
+RUN chmod +x /usr/local/bin/start.sh
 
 EXPOSE 80
 CMD ["/usr/local/bin/start.sh"]

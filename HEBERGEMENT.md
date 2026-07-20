@@ -21,19 +21,34 @@ d'un point clé : **le disque est-il inscriptible et persistant ?**
 Un `Dockerfile` est fourni : il fait tourner le site exactement comme en production
 (Apache + PHP + `.htaccess`), avec un disque inscriptible.
 
-### Render (gratuit)
+### Render — déploiement
 
-1. Pousse le dépôt sur GitHub (déjà fait).
-2. Sur [render.com](https://render.com) → **New +** → **Web Service** → connecte le dépôt.
-3. Render détecte le `Dockerfile` automatiquement. Laisse les réglages par défaut,
-   clique **Create Web Service**.
-4. Au bout de quelques minutes tu obtiens une URL `https://xxx.onrender.com`.
-   Le site **et** l'admin (`/admin`, mot de passe `DIF-admin-2026`) fonctionnent.
+Deux façons, au choix :
 
-**Pour que les modifications survivent aux redéploiements** : dans Render, onglet
-**Disks** → **Add Disk** (ex. 1 Go, chemin de montage `/data`), puis onglet
-**Environment** → ajoute la variable `DIF_DATA_DIR=/data`. Le contenu éditable,
-les images et les messages seront alors stockés sur ce disque persistant.
+**a) En un clic (Blueprint)** — un fichier `render.yaml` est fourni.
+1. Sur [render.com](https://render.com) → **New +** → **Blueprint** → sélectionne ce dépôt.
+2. Render lit `render.yaml`, clique **Apply**.
+
+**b) Manuel** — 
+1. Sur [render.com](https://render.com) → **New +** → **Web Service** → connecte le dépôt.
+2. Render détecte le `Dockerfile`. Laisse les réglages par défaut → **Create Web Service**.
+
+Dans les deux cas, au bout de quelques minutes tu obtiens une URL `https://xxx.onrender.com` :
+le site **et** l'admin (`/admin`, mot de passe `DIF-admin-2026`) fonctionnent.
+
+**Offre gratuite** : idéale pour tester. L'admin fonctionne et les ajouts sont visibles
+tout de suite ; ils sont conservés le temps de la session mais **réinitialisés à chaque
+redéploiement** (le disque du plan gratuit est éphémère et le service se met en veille
+après inactivité).
+
+**Pour conserver durablement les modifications** (offre payante) : ajoute un disque
+persistant et pointe l'app dessus —
+- onglet **Disks** → **Add Disk** : nom `dif-data`, chemin de montage `/data`, 1 Go ;
+- onglet **Environment** → variable `DIF_DATA_DIR=/data`.
+
+Le contenu éditable, les images et les messages seront alors stockés sur ce disque et
+**survivront aux redéploiements**. (Dans `render.yaml`, il suffit de décommenter les blocs
+`envVars` et `disk`.)
 
 ### Railway
 
