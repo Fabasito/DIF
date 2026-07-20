@@ -38,7 +38,7 @@ function csrf_check(): void {
 }
 
 // --- Mot de passe effectif : surcharge locale (modifiable depuis l'admin) sinon config ---
-define('DIF_AUTH_OVERRIDE', __DIR__ . '/auth.local.php');
+define('DIF_AUTH_OVERRIDE', (DIF_WRITABLE !== DIF_ROOT ? DIF_WRITABLE : __DIR__) . '/auth.local.php');
 function admin_password_hash(): string {
     if (is_file(DIF_AUTH_OVERRIDE)) {
         $h = include DIF_AUTH_OVERRIDE;

@@ -6,8 +6,37 @@
 declare(strict_types=1);
 
 define('DIF_ROOT', dirname(__DIR__));
-define('DIF_CONTENT', DIF_ROOT . '/content');
-define('DIF_UPLOADS', DIF_ROOT . '/assets/uploads');
+
+/*
+ * Répertoire INSCRIPTIBLE (contenu éditable, uploads, logs).
+ * - Hébergement classique (Apache/PHP) : le dépôt lui-même (comportement par défaut).
+ * - Serverless en lecture seule (Vercel…) : un dossier temporaire inscriptible,
+ *   amorcé au premier accès depuis le contenu du dépôt.
+ * Surchargable via la variable d'environnement DIF_DATA_DIR.
+ */
+$__dif_wr = getenv('DIF_DATA_DIR');
+if (!$__dif_wr && getenv('VERCEL')) $__dif_wr = sys_get_temp_dir() . '/dif-data';
+if (!$__dif_wr) $__dif_wr = DIF_ROOT;
+define('DIF_WRITABLE', $__dif_wr);
+unset($__dif_wr);
+
+define('DIF_CONTENT', DIF_WRITABLE . '/content');
+define('DIF_UPLOADS', DIF_WRITABLE . '/assets/uploads');
+define('DIF_LOGS', DIF_WRITABLE . '/logs');
+
+/** Amorce le répertoire inscriptible depuis le dépôt (serverless). */
+function dif_bootstrap_data(): void {
+    if (DIF_WRITABLE === DIF_ROOT) return;
+    if (!is_dir(DIF_CONTENT)) {
+        @mkdir(DIF_CONTENT, 0775, true);
+        foreach (glob(DIF_ROOT . '/content/*.json') ?: [] as $src) {
+            @copy($src, DIF_CONTENT . '/' . basename($src));
+        }
+    }
+    if (!is_dir(DIF_UPLOADS)) @mkdir(DIF_UPLOADS, 0775, true);
+    if (!is_dir(DIF_LOGS))    @mkdir(DIF_LOGS, 0775, true);
+}
+dif_bootstrap_data();
 
 /** Échappement HTML sûr (UTF-8). */
 function e(?string $s): string {
@@ -101,7 +130,6 @@ function handle_upload(string $field): array {
 }
 
 /* ---- Messages de contact (stockés dans logs/, dossier protégé) ---- */
-define('DIF_LOGS', DIF_ROOT . '/logs');
 function messages_file(): string { return DIF_LOGS . '/messages.json'; }
 
 function load_messages(): array {

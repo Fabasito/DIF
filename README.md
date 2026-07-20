@@ -146,6 +146,12 @@ php -S localhost:8000
 # Admin :  http://localhost:8000/admin/   (mot de passe : DIF-admin-2026)
 ```
 
+## Héberger pour tester
+
+> **[HEBERGEMENT.md](HEBERGEMENT.md)** — déployer sur **Render/Railway** (Docker, admin
+> persistant, recommandé pour un test complet) ou sur **Vercel** (aperçu rapide, données
+> éphémères). Un `Dockerfile`, un `vercel.json` et le contrôleur `api/index.php` sont fournis.
+
 ## Mise en production
 
 > **Guide pas à pas complet : [DEPLOIEMENT.md](DEPLOIEMENT.md)** (sauvegarde de l'ancien
