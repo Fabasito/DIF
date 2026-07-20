@@ -142,6 +142,8 @@
       originals.forEach(function (el) {
         var c = el.cloneNode(true);
         c.setAttribute("aria-hidden", "true");
+        // Les cartes clonées ne doivent pas être atteignables au clavier.
+        c.querySelectorAll("a, button").forEach(function (n) { n.setAttribute("tabindex", "-1"); });
         track.appendChild(c);
       });
     }

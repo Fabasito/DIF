@@ -235,6 +235,8 @@ function collections(): array {
                 'promotion' => ['Promotion', 'select', '@promotions'],
                 'level'     => ['Niveau', 'select', ['Master 1', 'Master 2']],
                 'photo'     => ['Photo', 'image'],
+                'email'     => ['E-mail', 'text'],
+                'linkedin'  => ['Profil LinkedIn (URL)', 'text'],
             ],
         ],
         'temoignages' => [

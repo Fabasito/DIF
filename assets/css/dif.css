@@ -458,6 +458,14 @@ body.nav-open .mobile-nav { transform: translateX(0); }
 .trombi-card .tphoto { display: grid; place-items: center; width: 100%; aspect-ratio: 3/4; border-radius: var(--radius); background: var(--surface-2); background-size: cover; background-position: center top; border: 1px solid var(--line); overflow: hidden; }
 .trombi-card .tphoto-ph { font-family: var(--serif); font-size: 2rem; color: var(--brass); }
 .trombi-card figcaption { margin-top: .7rem; font-weight: 500; font-size: .95rem; }
+.trombi-card .tcontact { display: flex; justify-content: center; gap: .4rem; margin-top: .5rem; }
+.trombi-card .tcontact a {
+  width: 30px; height: 30px; display: grid; place-items: center;
+  border: 1px solid var(--line); border-radius: 50%; color: var(--muted);
+  transition: color .2s ease, border-color .2s ease, background .2s ease;
+}
+.trombi-card .tcontact a:hover { color: var(--brass); border-color: var(--brass); background: var(--surface-2); }
+.trombi-card .tcontact svg { width: 15px; height: 15px; }
 
 /* Timeline / promotions */
 .promo-row { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; padding: 1.1rem 0; border-bottom: 1px solid var(--line); }
