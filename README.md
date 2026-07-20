@@ -95,8 +95,13 @@ logs/                messages de contact (sauvegarde, dossier protégé)
 - **Actualités paginées & filtrables** — filtre par catégorie et pagination côté serveur
   (9 par page), sans dépendre du JavaScript (bon pour le SEO).
 - **Trombinoscope** — chaque promotion peut afficher ses étudiants (`promotion.php?slug=…`),
-  regroupés par niveau (M1 / M2), avec photo ou pastille à initiale. Les membres se gèrent depuis
-  le back-office (collection « Trombinoscope », avec sélection de la promotion et upload de photo).
+  regroupés par niveau (M1 / M2), avec photo, e-mail et LinkedIn ou pastille à initiale.
+- **Assistant de promotion** (`admin/promo-builder.php`) — un formulaire unique pour créer une
+  promotion complète : année, numéro (auto-incrémenté), photo de groupe M1+M2, puis sections M2 et
+  M1 avec l'ajout des étudiants un par un (photo, prénom, nom, e-mail, LinkedIn). Chaque photo est
+  téléversée en AJAX à la sélection (contourne la limite PHP de fichiers par envoi). À la création,
+  la promotion devient automatiquement la **promotion actuelle** (accueil + réseau) et le numéro de
+  promotion de l'accueil s'incrémente.
 
 Le contenu géré depuis `/admin` est écrit dans `content/*.json` (écriture atomique) et
 **apparaît immédiatement** sur le site public, qui lit ces fichiers à chaque affichage.

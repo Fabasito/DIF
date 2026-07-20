@@ -39,7 +39,11 @@ admin_header($type, $def['label']);
     <div class="eyebrow"><?= (int)count($items) ?> élément(s)</div>
     <h1><?= e($def['label']) ?></h1>
   </div>
+  <?php if ($type === 'promotions'): ?>
+  <a class="btn brass" href="promo-builder.php">+ Nouvelle promotion (assistant)</a>
+  <?php else: ?>
   <a class="btn brass" href="edit.php?type=<?= e($type) ?>">+ Ajouter un <?= e($def['singular']) ?></a>
+  <?php endif; ?>
 </div>
 
 <?php if (empty($items)): ?>
@@ -63,6 +67,9 @@ admin_header($type, $def['label']);
     <div class="actions">
       <form method="post" style="display:inline"><?= csrf_field() ?><input type="hidden" name="i" value="<?= $i ?>"><button class="btn ghost sm" name="action" value="up" title="Monter" <?= $i === 0 ? 'disabled' : '' ?>>↑</button></form>
       <form method="post" style="display:inline"><?= csrf_field() ?><input type="hidden" name="i" value="<?= $i ?>"><button class="btn ghost sm" name="action" value="down" title="Descendre" <?= $i === count($items)-1 ? 'disabled' : '' ?>>↓</button></form>
+      <?php if ($type === 'promotions'): ?>
+      <a class="btn ghost sm" href="promo-builder.php?slug=<?= e(rawurlencode(slugify((string)($it['years'] ?? '')))) ?>">Assistant</a>
+      <?php endif; ?>
       <a class="btn ghost sm" href="edit.php?type=<?= e($type) ?>&i=<?= $i ?>">Modifier</a>
       <form method="post" style="display:inline" onsubmit="return confirm('Supprimer cet élément ?');"><?= csrf_field() ?><input type="hidden" name="i" value="<?= $i ?>"><button class="btn del sm" name="action" value="delete">Supprimer</button></form>
     </div>

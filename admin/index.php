@@ -30,6 +30,11 @@ admin_header('index', 'Tableau de bord');
     <p>Gérer les <?= e(mb_strtolower($def['label'])) ?> affichés sur le site.</p>
   </a>
   <?php endforeach; ?>
+  <a class="card" href="promo-builder.php" style="border-color:var(--brass)">
+    <div class="k">✦</div>
+    <h3>Nouvelle promotion</h3>
+    <p>Assistant guidé : année, photos de groupe, étudiants M2 et M1 en une fois.</p>
+  </a>
   <a class="card<?= $unreadMsg ? ' card-alert' : '' ?>" href="messages.php">
     <div class="k"><?= (int)$msgCount ?><?php if ($unreadMsg): ?> <span class="nav-badge"><?= (int)$unreadMsg ?> non lu(s)</span><?php endif; ?></div>
     <h3>Messages</h3>
